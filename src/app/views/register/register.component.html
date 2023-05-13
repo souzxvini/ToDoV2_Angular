@@ -1,0 +1,110 @@
+<div class="background">
+  <div class="centralize">
+    <div class="form">
+        <h1 class="title text-center">REGISTER</h1>
+        <form #myForm="ngForm" [formGroup]="form" (ngSubmit)="signup()">
+
+          <mat-form-field class="example-full-width "  appearance="fill">
+            <mat-label >Name</mat-label>
+            <input matInput formControlName="name" >
+          </mat-form-field>
+
+          <app-message *ngIf="form.get('email')?.errors?.['email'] &&
+          form.get('email')?.touched"
+          message="Type the e-mail in the correct format!" class="text-start">
+          </app-message>
+
+          <app-message
+            *ngIf="form.get('email')?.errors?.['existentUser']"
+            message="There's already an user registered with this e-mail!" class="text-start"
+          ></app-message>
+
+          <mat-form-field class="example-full-width mt-1" appearance="fill" >
+            <mat-label >E-mail</mat-label>
+            <input matInput formControlName="email" >
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width mt-1" appearance="fill" >
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" >
+            <div *ngIf="form.get('password')?.errors && form.get('password')?.touched" mat-icon-button matSuffix matTooltipClass="tooltip-list"
+            [matTooltip]="['Must have at least:','One special character','One number','One uppercase character','One lowercase character','At least 6 characters'] | tooltipList">
+              <mat-icon class="danger">warning</mat-icon>
+            </div>
+          </mat-form-field>
+
+          <!--<div class="text-start">
+            <p class="password-requirements">Password requirements...</p>
+            <div >
+              <p *ngIf="form.get('password')?.errors?.['noSpecialCharacter']" class="wrong-requirements">
+                <mat-icon>help_outline</mat-icon> One special character
+              </p>
+              <p *ngIf="!form.get('password')?.errors?.['noSpecialCharacter']" class="correct-requirements">
+                <mat-icon>done</mat-icon> One special character
+              </p>
+
+              <p *ngIf="form.get('password')?.errors?.['noNumberCharacter']"  class="wrong-requirements ">
+                <mat-icon>help_outline</mat-icon> One number.
+              </p>
+              <p *ngIf="!form.get('password')?.errors?.['noNumberCharacter']"  class="correct-requirements">
+                <mat-icon>done</mat-icon> One number.
+              </p>
+
+              <p *ngIf="form.get('password')?.errors?.['noUppercaseCharacter']"  class="wrong-requirements ">
+                <mat-icon>help_outline</mat-icon> One uppercase character.
+              </p>
+              <p *ngIf="!form.get('password')?.errors?.['noUppercaseCharacter']"  class="correct-requirements">
+                <mat-icon>done</mat-icon> One uppercase character.
+              </p>
+
+              <p *ngIf="form.get('password')?.errors?.['noLowercaseCharacter']"  class="wrong-requirements ">
+                <mat-icon>help_outline</mat-icon> One lowercase character.
+              </p>
+              <p *ngIf="!form.get('password')?.errors?.['noLowercaseCharacter']"  class="correct-requirements">
+                <mat-icon>done</mat-icon>One lowercase character.
+              </p>
+
+              <p *ngIf="form.get('password')?.errors?.['minLength6Error']" class="wrong-requirements ">
+                <mat-icon>help_outline</mat-icon> 6 characters.
+              </p>
+              <p *ngIf="!form.get('password')?.errors?.['minLength6Error']" class="correct-requirements">
+                <mat-icon>done</mat-icon> 6 characters.
+              </p>
+            </div>
+
+          </div>
+          -->
+
+          <app-message
+            *ngIf="form.errors?.['diferentPassword'] &&
+            form.get('passwordConfirm')?.touched"
+            message="This password doesn't match the first one! " class="text-start">
+            </app-message>
+          <mat-form-field class="example-full-width mt-1" appearance="fill">
+            <mat-label>Confirm the password</mat-label>
+            <input matInput type="password" formControlName="passwordConfirm">
+          </mat-form-field>
+
+          <div class="row">
+            <div class="col-12 md-auto mt-1">
+            <button class="register-button" mat-raised-button color="primary"
+            [disabled]="form.invalid || isLoading || form.get('password')?.errors?.['minLength6Error'] || form.get('password')?.errors?.['noLowercaseCharacter'] ||
+            form.get('password')?.errors?.['noUppercaseCharacter'] || form.get('password')?.errors?.['noNumberCharacter'] ||
+            form.get('password')?.errors?.['noSpecialCharacter'] || form.get('name')?.errors?.['required']">
+              <div class="spinner-button">
+                <span *ngIf="isLoading && !logged" style="margin-right: 15px"><mat-spinner [diameter]="20"></mat-spinner></span><span *ngIf="!isLoading && !logged">SIGN UP</span>
+              </div>
+            </button>
+            </div>
+          </div>
+
+          <mat-divider class="mt-4"></mat-divider>
+
+          <div class="mt-3">
+             <p>Already have an account? <a class="links" [routerLink]="['/login']" >Login here!</a></p>
+          </div>
+
+        </form>
+
+    </div>
+</div>

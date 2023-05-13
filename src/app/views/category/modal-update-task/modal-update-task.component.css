@@ -1,0 +1,22 @@
+.actions{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close{
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+.save-button{
+  background: rgb(0, 92, 145);
+  color: white;
+}

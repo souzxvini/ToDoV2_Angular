@@ -1,0 +1,136 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-content: space-between;
+  height: 8vh;
+  background: var(--headerBackgroundColor) !important;
+  padding: 35px;
+  color: var(--headerTextColor) !important;
+}
+
+.example-container {
+  width: 100%;
+  height: 100vh;
+  background-color: transparent;
+}
+
+.menu-title{
+  text-align: center;
+  padding: 20px 0px;
+}
+
+.sidenav {
+  width: 300px;
+  background: var(--sidenavBackgroundColor) !important;
+  border: none;
+}
+
+.sidenav .mat-nav-list a{
+  color: var(--matExpansioMenuListTextColor);
+  font-weight: 500;
+}
+
+.sidenav .mat-nav-list a:hover {
+  color: var(--sidenavExpansionMenuBodyExpandedFontColorHover) !important;
+}
+
+.category-task{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-task div{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tasks-icon{
+  height: 30px !important;
+  width: 30px !important;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: rgb(20, 20, 20) !important;
+  box-shadow: none;
+}
+
+.add-category-button{
+  background-color: var(--addCategoryButtonBackgroundColor) !important;;
+  color: var(--addCategoryButtonColor) !important;
+  width: 100%;
+  border-radius: 0px !important;
+  font-size: 1.1em;
+  vertical-align: center;
+  font-weight: 700;
+}
+
+.header div button mat-icon{
+  transition: 0.2s ease-in-out;
+}
+
+/* cor hover icones header*/
+.header div button mat-icon:hover{
+  color: rgb(0, 135, 212)  ;
+}
+
+.sidenav .mat-accordion mat-expansion-panel mat-expansion-panel-header .mat-expansion-panel-header-title {
+  transition: 0.2s ease-in-out;
+}
+
+/* paineis expansivos menu :hover color*/
+.sidenav .mat-accordion mat-expansion-panel mat-expansion-panel-header:hover .mat-expansion-panel-header-title {
+  color: rgb(0, 135, 212)  !important;
+}
+
+.mat-nav-list a:hover {
+  transition: 0.1s ease-in-out;
+}
+
+.mat-nav-list a:hover {
+  background-color: rgb(0, 135, 212)!important;
+  color: white !important;
+}
+
+.title{
+  font-weight: 900 !important;
+  font-size: 3.3em !important;
+  color: var(--menuTitle) !important;
+  text-shadow: 0px 0px 40px var(--menuTitleShadow) !important;
+  text-align: center;
+  margin-bottom: 25px;
+
+}
+.flag{
+  width: 20px;
+  height: 15px;
+  align-items: center;
+  vertical-align: center;
+}
+
+.menu-title{
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+/*cor icon close menu*/
+.menu-title div button:hover{
+  transition: 0.2s ease-in-out;
+}
+
+.menu-title div button:hover{
+  color: rgb(0, 135, 212) !important;
+}
+
+mat-icon{
+  vertical-align: center;
+}
+
+
+

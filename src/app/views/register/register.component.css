@@ -1,0 +1,72 @@
+.example-form{
+  width: 100%;
+}
+
+.background{
+  height: 100%;
+  width: 100%;
+  color: white;
+}
+
+.title{
+  font-weight: 900;
+  font-size: 3.3em;
+  color: rgb(255, 255, 255);
+  margin-bottom: 30px
+}
+
+.centralize{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  width: 100%;
+  height: 100vh;
+}
+
+/*para ligar ativar a quebra de linha no tooltip*/
+::ng-deep .cdk-overlay-container, .cdk-global-overlay-wrapper {
+  white-space: pre-line;
+}
+
+mat-icon{
+  color: rgb(206, 70, 7) !important;
+}
+
+.form{
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 550px;
+  height: 70%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 60px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+.links{
+  color: rgb(170, 170, 170) ;
+  transition: ease-out 0.3s;
+}
+
+.links:hover{
+  color: rgb(255, 255, 255) ;
+}
+
+.register-button{
+  width: 100%!important;
+  background-color: rgb(255, 255, 255);
+  transition: 0.3s;
+  color: rgb(61, 61, 61);
+  font-weight: 700 !important;
+  font-size: 1.1em;
+}
+
+.spinner-button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}

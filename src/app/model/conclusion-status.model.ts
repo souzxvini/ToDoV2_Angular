@@ -1,0 +1,6 @@
+
+export enum ConclusionStatus{
+  OUT_OF_TIME = "OUT_OF_TIME",
+  WITHIN_TIME = "WITHIN_TIME",
+  BEFORE_START_TIME= "BEFORE_START_TIME"
+}

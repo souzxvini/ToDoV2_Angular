@@ -1,0 +1,112 @@
+{
+  "HEADER" : {
+    "Painel": "Painel",
+    "Categorias": "Categorias",
+    "Categoria": "Categoria",
+    "NenhumaCategoriaCriada": "Nenhuma categoria criada.",
+    "MeuPerfil": "Meu perfil",
+    "Idioma": "Idioma",
+    "Temas": "Temas",
+    "Sair": "Sair",
+    "AlterarDados": "Alterar Dados",
+    "AlterarSenha": "Alterar Senha",
+    "Claro": "Claro",
+    "Escuro": "Escuro",
+    "Azul": "Azul",
+    "DesejaSairDoSistema": "Deseja realmente sair do sistema?",
+    "Confirmacao": "Confirmação",
+    "Portugues": "Português",
+    "Ingles": "Inglês"
+  },
+  "CREATE_CATEGORY_MODAL": {
+    "AdicionarCategoria": "Adicionar Categoria",
+    "Nome": "Nome",
+    "Salvar": "Salvar",
+    "ManterJanelaAberta": "Manter janela aberta"
+  },
+  "CONFIRMATION_DIALOG": {
+    "Confirmar": "Confirmar",
+    "Cancelar": "Cancelar"
+  },
+  "CATEGORY": {
+    "AdicionarTarefa": "Adicionar Tarefa",
+    "AFazer": "A Fazer",
+    "SemDataDeterminada": "Sem data determinada",
+    "DentroDoPrazo": "Dentro do prazo",
+    "NaoHaNenhumaTarefaParaFazer": "Não há nenhuma tarefa para fazer.",
+    "NaoHaNenhumaTarefaConcluida": "Não há nenhuma tarefa concluída",
+    "NaoHaNenhumaTarefaNaoIniciada": "Não há nenhuma tarefa não iniciada",
+    "NaoHaNenhumaTarefaExpirada": "Não há nenhuma tarefa expirada",
+    "Concluidas": "Concluídas",
+    "Deletar": "Deletar",
+    "Editar": "Editar",
+    "NaoIniciadas": "Não Iniciadas",
+    "NaoIniciada": "Não Iniciada",
+    "Expiradas": "Expiradas",
+    "Expirada": "Expirada",
+    "NaoHaNenhumaTarefaNessaCategoria": "Não há nenhuma tarefa nessa categoria.",
+    "DeletarCategoria": "Deletar Categoria",
+    "DesejaExcluirCategoria": "Deseja realmente excluir essa categoria?",
+    "DesejaExcluirTarefa": "Deseja realmente excluir essa tarefa?",
+    "Confirmacao": "Confirmação"
+  },
+  "CATEGORY_MODAL_UPDATE_TASK": {
+    "EditarTarefa": "Editar Tarefa",
+    "Descricao": "Descrição",
+    "Prioridade": "Prioridade",
+    "DataInicial": "Data Inicial",
+    "DataFinal": "Data Final",
+    "DataInicialMaiorQueFinal": "A data inicial não pode ser maior que a data final!",
+    "Salvar": "Salvar"
+  },
+  "CATEGORY_MODAL_ADD_TASK": {
+    "AdicionarTarefa": "Adicionar Tarefa",
+    "Categoria": "Categoria",
+    "Descricao": "Descrição",
+    "Prioridade": "Prioridade",
+    "DataInicialMaiorQueFinal": "A data inicial não pode ser maior que a data final!",
+    "DataInicial": "Data Inicial",
+    "SelecioneUmaData": "Selecione uma data",
+    "DataFinal": "Data final",
+    "Salvar": "Salvar",
+    "ManterJanelaAberta": "Manter janela aberta"
+  },
+  "HOME": {
+    "SuaAtividade": "Sua Atividade",
+    "ProgressoGeralDasAtividades": "Progresso Geral das Tarefas",
+    "VisaoDetalhada": "Visão Detalhada",
+    "Categoria": "Categoria",
+    "TarefasAFazer": "Tarefas a fazer",
+    "TarefasConcluidas": "Tarefas concluídas",
+    "TarefasNaoIniciadas": "Tarefas não iniciadas",
+    "TarefasExpiradas": "Tarefas expiradas",
+    "NaoPossuiCategoriaTarefa": "Você não possui nenhuma categoria/tarefa.",
+    "Hoje": "Hoje",
+    "Ontem": "Ontem",
+    "Tarefas": "Tarefas"
+  },
+  "SNACKBAR": {
+    "CategoriaAdicionada": "Categoria adicionada com sucesso.",
+    "Fechar": "Fechar",
+    "TarefaConcluida": "Tarefa concluída.",
+    "CategoriaExcluida": "Categoria excluída com sucesso.",
+    "TarefaExcluida": "Tarefa excluída com sucesso.",
+    "TarefaAdicionada": "Tarefa adicionada com sucesso.",
+    "TarefaAtualizada": "Tarefa atualizada com sucesso.",
+    "DadosInvalidos": "Dados inválidos",
+    "TemaEscuroJaSelecionado": "Você ja está utilizando o tema 'ESCURO'!",
+    "TemaClaroJaSelecionado": "Você ja está utilizando o tema 'CLARO'!",
+    "ConfirmarMudancaTemaEscuro": "Você realmente deseja alterar para o tema 'ESCURO'?",
+    "ConfirmarMudancaTemaClaro": "Você realmente deseja alterar para o tema 'CLARO'?"
+  },
+  "LOGIN": {
+    "Email": "E-mail",
+    "Senha": "Senha",
+    "Entrar": "ENTRAR",
+    "EsqueceuASenha": "Esqueceu a senha?",
+    "NaoTemConta": "Não possui conta?",
+    "RegistreAqui": "Registre-se aqui!",
+    "EmailErrorMessage": "Digite o e-mail no formato correto!"
+  }
+
+}

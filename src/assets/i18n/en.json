@@ -1,0 +1,111 @@
+{
+  "HEADER" : {
+    "Painel": "Panel",
+    "Categorias": "Categories",
+    "Categoria": "Category",
+    "NenhumaCategoriaCriada": "No categories created.",
+    "MeuPerfil": "My profile",
+    "Idioma": "Language",
+    "Temas": "Themes",
+    "Sair": "Exit",
+    "AlterarDados": "Change personal data",
+    "AlterarSenha": "Change password",
+    "Claro": "Light",
+    "Escuro": "Dark",
+    "Azul": "Blue",
+    "DesejaSairDoSistema": "Do you really want to exit the system?",
+    "Confirmacao": "Confirmation",
+    "Portugues": "Portuguese",
+    "Ingles": "English"
+  },
+  "CREATE_CATEGORY_MODAL": {
+    "AdicionarCategoria": "Add Category",
+    "Nome": "Name",
+    "Salvar": "Save",
+    "ManterJanelaAberta": "Keep window opened"
+  },
+  "CONFIRMATION_DIALOG": {
+    "Confirmar": "Confirm",
+    "Cancelar": "Cancel"
+  },
+  "CATEGORY": {
+    "AdicionarTarefa": "Add Task",
+    "AFazer": "To Do",
+    "SemDataDeterminada": "No date determined",
+    "DentroDoPrazo": "Within the time limit",
+    "NaoHaNenhumaTarefaParaFazer": "There are no tasks to do.",
+    "NaoHaNenhumaTarefaConcluida": "There are no completed tasks.",
+    "NaoHaNenhumaTarefaNaoIniciada": "There are no unstarted tasks.",
+    "NaoHaNenhumaTarefaExpirada": "There are no expired tasks.",
+    "Concluidas": "Completed",
+    "Deletar": "Delete",
+    "Editar": "Edit",
+    "NaoIniciadas": "Unstarted",
+    "NaoIniciada": "Unstarted",
+    "Expiradas": "Expired",
+    "Expirada": "Expired",
+    "NaoHaNenhumaTarefaNessaCategoria": "There are no tasks in this category.",
+    "DeletarCategoria": "Delete Category",
+    "DesejaExcluirCategoria": "Do you really want to delete this category?",
+    "DesejaExcluirTarefa": "Do you really want to delete this task?",
+    "Confirmacao": "Confirmation"
+  },
+  "CATEGORY_MODAL_UPDATE_TASK": {
+    "EditarTarefa": "Edit Task",
+    "Descricao": "Description",
+    "Prioridade": "Priority",
+    "DataInicial": "Initial Date",
+    "DataFinal": "Final Date",
+    "DataInicialMaiorQueFinal": "The initial date cannot be greater than final date!",
+    "Salvar": "Save"
+  },
+  "CATEGORY_MODAL_ADD_TASK": {
+    "AdicionarTarefa": "Add Task",
+    "Categoria": "Category",
+    "Descricao": "Description",
+    "Prioridade": "Priority",
+    "DataInicialMaiorQueFinal": "The initial date cannot be greater than final date!",
+    "DataInicial": "Initial Date",
+    "SelecioneUmaData": "Select a date",
+    "DataFinal": "Final Date",
+    "Salvar": "Save",
+    "ManterJanelaAberta": "Keep window opened"
+  },
+  "HOME": {
+    "SuaAtividade": "Your Activity",
+    "ProgressoGeralDasAtividades": "General Progress of Activities",
+    "VisaoDetalhada": "Detailed View",
+    "Categoria": "Category",
+    "TarefasAFazer": "To Do Tasks",
+    "TarefasConcluidas": "Done Tasks",
+    "TarefasNaoIniciadas": "Unstarted Tasks",
+    "TarefasExpiradas": "Expired Tasks",
+    "NaoPossuiCategoriaTarefa": "You do not have any categories/tasks.",
+    "Hoje": "Today",
+    "Ontem": "Yesterday",
+    "Tarefas": "Tasks"
+  },
+  "SNACKBAR": {
+    "CategoriaAdicionada": "Category added successfully.",
+    "Fechar": "Close",
+    "TarefaConcluida": "Task done.",
+    "CategoriaExcluida": "Category deleted successfully.",
+    "TarefaExcluida": "Task deleted successfully.",
+    "TarefaAdicionada": "Task added successfully.",
+    "TarefaAtualizada": "Task updated successfully.",
+    "DadosInvalidos": "Invalid data.",
+    "TemaEscuroJaSelecionado": "You are already using the 'DARK' theme!",
+    "TemaClaroJaSelecionado": "You are already using the 'LIGHT' theme!!",
+    "ConfirmarMudancaTemaEscuro": "Do you really wanna change the theme to 'DARK'?",
+    "ConfirmarMudancaTemaClaro": "Do you really wanna change the theme to 'LIGHT'?"
+  },
+  "LOGIN": {
+    "Email": "Email",
+    "Senha": "Password",
+    "Entrar": "GET STARTED",
+    "EsqueceuASenha": "Forgot the password?",
+    "NaoTemConta": "Don't have an account?",
+    "RegistreAqui": "Register here!",
+    "EmailErrorMessage": "Type the email in the correct format!"
+  }
+}

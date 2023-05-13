@@ -1,0 +1,16 @@
+.bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: auto;
+  height: 8vh;
+  background-color: rgb(70, 81, 75);
+}
+
+.bottom span {
+  text-align: center;
+  margin: auto;
+  width: 100%;
+  color: white;
+}

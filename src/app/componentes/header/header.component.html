@@ -1,0 +1,123 @@
+<mat-sidenav-container class="example-container">
+  <mat-sidenav #dashboard [mode]="(isHandset$ | async) ? 'push' : 'side'" class="sidenav" opened>
+    <div class="menu-title">
+      <button mat-button (click)="dashboard.toggle()" *ngIf="dashboard.opened" matTooltip="Fechar menu">
+        <mat-icon>menu_open</mat-icon>
+      </button>
+    </div>
+    <div>
+      <h1 class="title">MENU</h1>
+    </div>
+
+    <mat-accordion class="accordionMenu">
+      <mat-expansion-panel class="mat-elevation-z0" [expanded]="router.url.startsWith('/home') || router.url.startsWith('/reminders')">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon class="menu-icon">dashboard</mat-icon> {{ 'HEADER.Painel' | translate }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <a mat-list-item routerLink="/home" routerLinkActive="active-link">
+            Home
+          </a>
+          <a mat-list-item routerLink="/reminders" routerLinkActive="active-link">
+            Lembretes
+          </a>
+
+        </mat-nav-list>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel class="mat-elevation-z0" [expanded]="router.url.startsWith('/category/')">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon class="menu-icon">folder_open</mat-icon> {{ 'HEADER.Categorias' | translate }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-nav-list>
+          <ng-container *ngFor="let category of categories">
+            <a mat-list-item routerLinkActive="active-link" [routerLink]="['category', category.categoryId]">
+              <div class="category-task">
+                <div>
+                  {{ category.name }}
+                </div>
+                <span>
+                  <button mat-mini-fab matTooltip="Você possui {{category.todoTasks.length}} tarefas pra fazer."
+                    matTooltipPosition="after" class="tasks-icon">
+                    {{category.todoTasks.length}}
+                  </button>
+                </span>
+              </div>
+            </a>
+          </ng-container>
+
+          <a mat-list-item *ngIf="categories.length == 0">
+            <div>
+              <em><span> {{ 'HEADER.NenhumaCategoriaCriada' | translate }} </span></em>
+            </div>
+          </a>
+          <button mat-raised-button class="add-category-button" (click)="openModalCreateCategory(false)">
+            <mat-icon>add</mat-icon> {{ 'HEADER.Categoria' | translate }}
+          </button>
+        </mat-nav-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="header">
+      <div class="nav-left">
+        <button mat-button (click)="dashboard.toggle()" *ngIf="!dashboard.opened" matTooltip="Abrir menu">
+          <mat-icon>menu</mat-icon>
+        </button>
+
+      </div>
+
+      <div>
+        <button mat-icon-button>
+          <mat-icon>notifications</mat-icon>
+        </button>
+        <button mat-icon-button [matMenuTriggerFor]="animals">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+        <mat-menu #animals="matMenu" xPosition="before">
+          <button mat-menu-item>
+            <mat-icon>how_to_reg</mat-icon>{{ 'HEADER.MeuPerfil' | translate }}
+          </button>
+          <button mat-menu-item [matMenuTriggerFor]="languages">
+            <mat-icon>language</mat-icon> {{ 'HEADER.Idioma' | translate }}
+          </button>
+          <button mat-menu-item [matMenuTriggerFor]="themes">
+            <mat-icon>design_services</mat-icon> {{ 'HEADER.Temas' | translate }}
+          </button>
+
+          <hr style="margin: 10px 10px; color: white;">
+
+          <button mat-menu-item (click)="openConfirmationDialog()">
+            <mat-icon>logout</mat-icon> {{ 'HEADER.Sair' | translate }}
+          </button>
+        </mat-menu>
+
+        <mat-menu #languages="matMenu">
+          <button mat-menu-item (click)="changeLanguage('pt')">
+            <img src="../../../assets/img/brasiil.jpg" class="flag"> {{ 'HEADER.Portugues' | translate }}
+          </button>
+          <button mat-menu-item  (click)="changeLanguage('en')">
+            <img src="../../../assets/img/USA.png" class="flag"> {{ 'HEADER.Ingles' | translate }}
+          </button>
+        </mat-menu>
+
+        <mat-menu #themes="matMenu">
+          <button mat-menu-item (click)="changeTheme('LIGHT')">
+            <mat-icon>brightness_5</mat-icon> {{ 'HEADER.Claro' | translate }}
+          </button>
+          <button mat-menu-item (click)="changeTheme('DARK')">
+            <mat-icon>brightness_2</mat-icon> {{ 'HEADER.Escuro' | translate }}
+          </button>
+        </mat-menu>
+
+      </div>
+    </div>
+    <router-outlet></router-outlet>
+    <!--<app-footer></app-footer>-->
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

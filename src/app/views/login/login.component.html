@@ -1,0 +1,55 @@
+<div class="background">
+  <div class="centralize">
+    <div class="form">
+      <div>
+        <h1 class="login-title text-center">LOGIN</h1>
+        <form [formGroup]="form" class="login-form">
+
+          <app-message *ngIf="form.get('email')?.errors?.['email'] &&
+            form.get('email')?.touched" message="{{ 'LOGIN.EmailErrorMessage' | translate }}" class="text-start">
+          </app-message>
+          <mat-form-field appearance="fill">
+            <mat-label>{{ 'LOGIN.Email' | translate }} </mat-label>
+            <input matInput formControlName="email">
+          </mat-form-field>
+
+          <mat-form-field class="mt-3" appearance="fill">
+            <mat-label> {{ 'LOGIN.Senha' | translate }} </mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hidePassword">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <div class="row">
+            <div class="col-12 md-auto mt-3">
+              <button class="login-button" mat-raised-button color="primary" [disabled]="form.invalid || isLoading" [@buttonColor]="buttonState"
+                (click)="login()">
+                <div class="spinner-button">
+                  <span *ngIf="isLoading && !logged" style="margin: 7px">
+                    <mat-spinner [diameter]="20"></mat-spinner>
+                  </span>
+                  <span *ngIf="!isLoading && !logged">{{ 'LOGIN.Entrar' | translate }}</span>
+                  <mat-icon *ngIf="logged" style="margin: 7px">done</mat-icon>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div class="mt-4 ">
+            <a class="links"> {{ 'LOGIN.EsqueceuASenha' | translate }} </a>
+          </div>
+
+          <mat-divider class="mt-4"></mat-divider>
+
+          <div class="mt-4">
+            <p> {{ 'LOGIN.NaoTemConta' | translate }} <a class="links"
+                [routerLink]="['/register']">{{ 'LOGIN.RegistreAqui' | translate }}</a></p>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>

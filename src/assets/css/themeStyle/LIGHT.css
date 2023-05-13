@@ -1,0 +1,92 @@
+:root {
+   /*Menu - SideNav */
+  --sidenavBackgroundColor: rgb(210, 210, 210);
+  --sidenavColor: rgb(0, 0, 0);
+  --sidenavExpansionMenuBodyExpandedFontColor: rgb(0, 0, 0);
+  --sidenavExpansionMenuBodyExpandedFontColorHover: rgb(255, 255, 255);
+  --addCategoryButtonBackgroundColor: rgb(0, 135, 212) ;
+  --addCategoryButtonColor: rgb(255, 255, 255);
+  --menuTitle: rgb(0, 0, 0);
+  --menuTitleShadow: rgb(210, 210, 210);
+  --headerBackgroundColor: rgb(210, 210, 210);
+  --headerTextColor: rgb(0, 0, 0);
+  --backgroundColor: rgb(216, 216, 216);
+
+  /*Right Menu*/
+  --rightMenuTextColor: rgb(0, 0, 0);
+  --rightMenuBackgroundColor: rgb(216, 216, 216);
+  --rightMenuIconsColor: rgb(0, 0, 0);
+
+  /*Modal*/
+  --modalBackgroundColor: rgb(210, 210, 210);
+  --modalTextColor: rgb(0, 0, 0);
+
+  /*Checkbox*/
+  --checkboxOnClickShadow: rgb(0, 0, 0);
+  --checkboxBorderColor: rgb(0, 0, 0);
+
+  /*Mat-Card*/
+  --matCardBackgroundColor: rgb(0, 0, 0, 0.05);
+  --taskCardBackgroundColor: rgb(0, 0, 0, 0.1 );
+  --matCardTaskDetailsBackgroundColor: rgb(0, 0, 0, 0.15);
+
+  /*Mat-Form-Field*/
+  --matFormFieldTextColor: rgb(0, 0, 0);
+  --matFormFieldDisabledTextColor: rgb(0, 0, 0);
+  --matFormFieldBackgroundFillColor: rgba(0, 0, 0, 0.15);
+
+  /*Mat-Tab*/
+  --matTabLabelTextColor: rgb(0, 0, 0);
+  --matTabLabelActiveTextColor: rgb(0, 0, 0);
+  --matTabLabelInactiveTextColor: rgb(65, 65, 65);
+
+  /*Home Mat-Expansion*/
+  --homeMatExpansionTextColor: rgb(0, 0, 0);
+ --matExpansioMenuListTextColor: rgb(0, 0, 0);
+ --matExpansionBodyHomeBackgroundColor: rgb(0, 0, 0, 0.05);
+ --MenuExpansionPanelArrow: rgb(0, 0, 0);
+ --homeMatExpansionBackgroundColor: rgb(0, 0, 0, 0.05);
+ --homeMatExpansionExpandedBackgroundColor: rgb(0, 0, 0, 0.05);
+ --menuMatExpansionExpandedBackgroundColor: rgb(0, 0, 0, 0.05);
+ --menuMatExpansionMatNavListBackgroundColor: rgb(233, 233, 233) ;
+ --matExpansionMenuTextColor: rgb(0, 0, 0) ;
+
+  /*Category Category Card*/
+  --categoryCardTitleColor: rgb(0, 0, 0);
+  --detailsCardTextColor: rgb(0, 0, 0);
+  --matCardTaskDescriptionColor: rgb(0, 0, 0);
+  --matCardEmptyTaskTextColor: rgb(0, 0, 0);
+
+  /*Mat-Select*/
+  --matSelectBackgroundColor: rgb(210, 210, 210);
+  --matSelectTextColor: rgb(0, 0, 0);
+
+  /*mat-paginator*/
+  --matPaginatorBackgroundColor: transparent;
+  --matPaginatorTextColor: rgb(0, 0, 0);
+  --homePaginatorBackgroundColor: transparent;
+  --homePaginatortextColor: rgb(0, 0, 0);
+
+  /*Mat-Datepicker*/
+  --matDatePickerSelectedValueBackgroundColor: rgb(0, 135, 212);
+  --matDatePickerBackgroundColor: rgb(210, 210, 210);
+  --matDatePickerTextColor: rgb(0, 0, 0);
+
+  /*Calendar*/
+  --remindersCalendarBackgroundColor: rgb(233, 233, 233) ;
+  --remindersCalendarTextColor: rgb(0, 0, 0);
+
+  /*Login*/
+  --loginTitleColor: rgb(0, 0, 0);
+  --linksColor: rgb(58, 58, 58);
+  --linksHoverColor: rgb(0, 0, 0);
+
+    /*Table*/
+  --tableRowHoverColor: rgba(250, 0, 0, 0.005);
+  --tableThBackgroundColor: rgba(0, 0, 0, 0.1);
+  --tableThTextColor: rgb(0, 0, 0);
+  --tableTdTextColor: rgb(0, 0, 0);
+  --tableBackgroundColor: rgb(216, 216, 216);
+  --emptyTableBackgroundColor: rgb(216, 216, 216);
+}
+

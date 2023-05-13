@@ -1,0 +1,58 @@
+<div style="display: flex; justify-content: space-between; vertical-align: auto;" >
+  <h1 mat-dialog-title> {{ 'CATEGORY_MODAL_UPDATE_TASK.EditarTarefa' | translate }} </h1>
+  <button mat-icon-button mat-dialog-close class="pHover">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<div>
+
+  <form [formGroup]="formUpdateTask" (ngSubmit)="updateTask()">
+    <div class="mt-3">
+
+      <mat-form-field appearance="fill">
+        <mat-label> {{ 'CATEGORY_MODAL_UPDATE_TASK.Descricao' | translate }} </mat-label>
+        <textarea matInput formControlName="description" rows="4"></textarea>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label> {{ 'CATEGORY_MODAL_UPDATE_TASK.Prioridade' | translate }} </mat-label>
+        <mat-select formControlName="priority"  disableOptionCentering>
+          <mat-option *ngFor="let priority of priorities" [value]="priority">
+            {{priority}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <app-message *ngIf="formUpdateTask.get('initialDate')?.errors?.['invalido']"
+          message=" {{ 'CATEGORY_MODAL_UPDATE_TASK.DataInicialMaiorQueFinal' | translate }} " class="text-start">
+      </app-message>
+      <mat-form-field appearance="fill" class="example-form-field" [ngClass]="formUpdateTask.get('initialDate')?.errors?.['invalido'] ? 'mat-form-field-error' : ''">
+        <mat-label> {{ 'CATEGORY_MODAL_UPDATE_TASK.DataInicial' | translate }} </mat-label>
+        <input matInput [matDatepicker]="datepicker" formControlName="initialDate" placeholder="Selecione uma data"
+          readonly>
+        <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
+        <mat-datepicker #datepicker>
+        </mat-datepicker>
+
+      </mat-form-field>
+
+
+      <mat-form-field appearance="fill">
+        <mat-label> {{ 'CATEGORY_MODAL_UPDATE_TASK.DataFinal' | translate }} </mat-label>
+        <input matInput [matDatepicker]="datepicker2" formControlName="deadline" placeholder="Selecione uma data"
+          readonly>
+        <mat-datepicker-toggle matSuffix [for]="datepicker2"></mat-datepicker-toggle>
+        <mat-datepicker #datepicker2>
+        </mat-datepicker>
+      </mat-form-field>
+
+    </div>
+
+      <div>
+        <button class="save-button" mat-raised-button [disabled]="!loaded || formUpdateTask.invalid">
+          {{ 'CATEGORY_MODAL_UPDATE_TASK.Salvar' | translate }}
+        </button>
+      </div>
+  </form>
+
+</div>

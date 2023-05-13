@@ -1,0 +1,113 @@
+<div class="background">
+  <div class="centralize">
+    <div class="main">
+      <div class="row">
+        <div class="col-12 col-md-12 col-lg-6 mb-3">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ 'HOME.SuaAtividade' | translate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div style="width: 100%;">
+              <div style="display: flex; justify-content: end; padding-right: 37px ;">
+                <div>
+                  <button class="add-button mb-3" matTooltip="Exportar tabela para arquivo PDF (.PNG)" mat-raised-button
+                   (click)="generatePdf('activityChart', 'Sua Atividade')">
+                    <mat-icon>download</mat-icon> PDF <img src="../../../assets/img/pdf.png" class="pdf">
+                  </button>
+                </div>
+              </div>
+              <div class="chart-container">
+                <canvas id="activityChart" style="padding-top: 0px;">{{ chart }}</canvas>
+              </div>
+            </div>
+
+          </mat-expansion-panel>
+        </div>
+
+        <div class="col-12 col-md-12 col-lg-6 mb-3">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ 'HOME.ProgressoGeralDasAtividades' | translate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div style="display: flex; justify-content: end; padding-right: 37px ;">
+              <div>
+                <button class="add-button mb-3" matTooltip="Exportar tabela para arquivo PDF (.PNG)" mat-raised-button
+                [disabled]="dataSource.filteredData.length == 0" (click)="generatePdf('progressChart', 'Progresso Geral das Atividades')">
+                  <mat-icon>download</mat-icon> PDF <img src="../../../assets/img/pdf.png" class="pdf">
+                </button>
+              </div>
+            </div>
+            <div class="centralize-chart chart-container">
+              <canvas id="progressChart" style="padding-top: 0px;">{{ progressChart }}</canvas>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </div>
+      <div class="row m">
+        <div class="col-12">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                {{ 'HOME.VisaoDetalhada' | translate }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="table-area">
+              <div style="display: flex; justify-content: end">
+                <div style="padding-right: 15px;">
+                  <button class="add-button mb-3" matTooltip="Exportar tabela para arquivo Excel" mat-raised-button
+                  [disabled]="dataSource.filteredData.length == 0" (click)="exportarExcel('Visão Geral')">
+                    <mat-icon>download</mat-icon> Excel <img src="../../../assets/img/excel.png" class="pdf">
+                  </button>
+                </div>
+
+              </div>
+
+              <div class="table-responsive">
+                <table id="myTable" mat-table [dataSource]="dataSource" class="full-width-table">
+                  <ng-container matColumnDef="categoryName">
+                    <th mat-header-cell *matHeaderCellDef> {{ 'HOME.Categoria' | translate }} </th>
+                    <td mat-cell *matCellDef="let row"> {{ row.name }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="todoTasks">
+                    <th mat-header-cell *matHeaderCellDef> {{ 'HOME.TarefasAFazer' | translate }} </th>
+                    <td mat-cell *matCellDef="let row"> {{ row.todoTasks.length }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="doneTasks">
+                    <th mat-header-cell *matHeaderCellDef> {{ 'HOME.TarefasConcluidas' | translate }} </th>
+                    <td mat-cell *matCellDef="let row"> {{ row.doneTasks.length }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="notStarted">
+                    <th mat-header-cell *matHeaderCellDef> {{ 'HOME.TarefasNaoIniciadas' | translate }} </th>
+                    <td mat-cell *matCellDef="let row"> {{ row.notStartedTasks.length }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="overdue">
+                    <th mat-header-cell *matHeaderCellDef> {{ 'HOME.TarefasExpiradas' | translate }} </th>
+                    <td mat-cell *matCellDef="let row"> {{ row.expiredTasks.length }} </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              </div>
+              <div *ngIf="dataSource.filteredData.length == 0" class="empty-table">
+                <em>
+                  {{ 'HOME.NaoPossuiCategoriaTarefa' | translate }}
+                </em>
+              </div>
+
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
