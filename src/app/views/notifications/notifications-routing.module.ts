@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { RemindersComponent } from './reminders.component';
+import { NotificationsComponent } from './notifications.component';
 
 const routes: Routes = [
   {
     path:'',
-    component: RemindersComponent
+    component: NotificationsComponent
+  },
+  {
+    path:':id',
+    component: NotificationsComponent
   }
 ];
 
@@ -13,4 +17,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class RemindersRoutingModule {}
+export class NotificationsRoutingModule {}

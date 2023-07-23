@@ -17,10 +17,30 @@ import { TranslateService } from '@ngx-translate/core';
 export class ModalUpdateTaskComponent implements OnInit {
 
   formUpdateTask: FormGroup;
-  priorities: string[] = [];
   taskId: number
   task: Task;
   loaded: boolean = true
+
+  priorities = [
+    {
+      icon: 'keyboard_arrow_up',
+      viewValue: 'Alta',
+      class: 'high-priority',
+      value: 1
+    }, {
+      icon: 'keyboard_arrow_right',
+      viewValue: 'Média',
+      class: 'medium-priority',
+      value: 2
+    }, {
+      icon: 'keyboard_arrow_down',
+      viewValue: 'Baixa',
+      class: 'low-priority',
+      value: 3
+    },
+  ];
+
+  selected: any;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -29,7 +49,7 @@ export class ModalUpdateTaskComponent implements OnInit {
     private snackbar: MatSnackBar,
     private datePipe: DatePipe,
     private translateService: TranslateService
-    ) { }
+  ) { }
 
   ngOnInit(): void {
     this.formUpdateTask = this.fb.group({
@@ -46,45 +66,49 @@ export class ModalUpdateTaskComponent implements OnInit {
       }
     })
 
-    this.getPriorities();
-
     this.formUpdateTask.valueChanges.subscribe(() => {
-      if(!this.formUpdateTask.get('initialDate').value || !this.formUpdateTask.get('deadline').value){
-        this.formUpdateTask.get('initialDate').setErrors( null)
-        this.formUpdateTask.get('deadline').setErrors( null)
+      if (!this.formUpdateTask.get('initialDate').value || !this.formUpdateTask.get('deadline').value) {
+        this.formUpdateTask.get('initialDate').setErrors(null)
+        this.formUpdateTask.get('deadline').setErrors(null)
         return;
       }
-      if(this.formUpdateTask.get('initialDate').value.getTime() > this.formUpdateTask.get('deadline').value.getTime()){
-        this.formUpdateTask.get('initialDate').setErrors({invalido: true})
-        this.formUpdateTask.get('deadline').setErrors({invalido: true})
-      }else{
-        this.formUpdateTask.get('initialDate').setErrors( null)
-        this.formUpdateTask.get('deadline').setErrors( null)
+      if (this.formUpdateTask.get('initialDate').value.getTime() > this.formUpdateTask.get('deadline').value.getTime()) {
+        this.formUpdateTask.get('initialDate').setErrors({ invalido: true })
+        this.formUpdateTask.get('deadline').setErrors({ invalido: true })
+      } else {
+        this.formUpdateTask.get('initialDate').setErrors(null)
+        this.formUpdateTask.get('deadline').setErrors(null)
       }
     })
   }
 
-  fillForm(task: Task){
+  fillForm(task: Task) {
     this.formUpdateTask.get('description').setValue(task.description);
 
-    if(task.initialDate) {
+    if (task.initialDate) {
       let initialDate = new Date(task.initialDate);
       initialDate.setDate(initialDate.getDate() + 1)
       this.formUpdateTask.get('initialDate').setValue(initialDate);
     }
-    if(task.deadline) {
+    if (task.deadline) {
       let deadline = new Date(task.deadline);
       deadline.setDate(deadline.getDate() + 1)
       this.formUpdateTask.get('deadline').setValue(deadline);
     }
-    this.formUpdateTask.get('priority').setValue(task.priority);
+
+    if (task.priority == '1') {
+      this.selected = this.priorities[0]
+      
+    } else if(task.priority == '2'){
+      this.selected = this.priorities[1]
+    } else{
+      this.selected = this.priorities[2]
+    }
+
+    this.setPriority();
   }
 
-  getPriorities() {
-    this.priorities = Object.values(Priority);
-  }
-
-  updateTask(){
+  updateTask() {
     this.loaded = false;
 
     const body = JSON.stringify({
@@ -110,4 +134,7 @@ export class ModalUpdateTaskComponent implements OnInit {
     })
   }
 
+  setPriority() {
+    this.formUpdateTask.controls['priority'].setValue(this.selected.value);
+  }
 }

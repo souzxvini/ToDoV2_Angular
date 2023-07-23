@@ -1,90 +1,122 @@
 <div class="background">
   <div class="main">
-    <div style="width: 100%; display: flex; justify-content: end;">
+    <div style="width: 100%; display: flex; justify-content: start;">
       <button mat-raised-button class="add-button mb-3" (click)="openModalAddTask(false)">
         <mat-icon>add</mat-icon> {{ 'CATEGORY.AdicionarTarefa' | translate }}
       </button>
     </div>
 
     <!--TO DO TASKS-->
-    <mat-expansion-panel [expanded]="false" class="mb-3">
+    <mat-expansion-panel [expanded]="todoExpandedPanel" class="mb-3">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Tarefas a Fazer <em>({{todoTasksDataSource.filteredData.length}})</em>
+          Tarefas a Fazer <em>({{completeTodoTasksDataSource.data.length}})</em>
         </mat-panel-title>
       </mat-expansion-panel-header>
 
       <div class="table-area">
-        <div class="table-responsive">
-          <table mat-table *ngIf="todoTasksDataSource.filteredData.length > 0" [dataSource]="todoTasksDataSource"
-            class="full-width-table">
+        <div style="display: flex; margin-bottom: -1.25em; width: 100%;"
+          *ngIf="!(todoTasksDataSource.data.length == 0 && todoTasksPrioritiesFilter.length == 3)">
+          <mat-form-field style="margin-top: 15px; max-width: 250px; margin-right: 15px;" appearance="fill">
+            <mat-label>Filtrar tarefas
+              <small><em>(Descrição)</em></small>
+            </mat-label>
+            <input matInput #filterInputTask (keyup)="filterTodoTasks($event)">
+          </mat-form-field>
 
-            <ng-container matColumnDef="checkbox">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row">
-                <ng-container>
-                  <mat-checkbox [checked]="verifyIfTaskIsDone(row)" (click)="changeTaskStatus(row)"
-                    matTooltip="Concluir tarefa"></mat-checkbox>
-                </ng-container>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="description">
-              <th mat-header-cell *matHeaderCellDef> Descrição</th>
-              <td mat-cell *matCellDef="let row"> {{ row.description }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="priority">
-              <th mat-header-cell *matHeaderCellDef> Prioridade </th>
-              <td mat-cell *matCellDef="let row"> {{ row.priority }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="initialDate">
-              <th mat-header-cell *matHeaderCellDef> Data Inicial </th>
-              <td mat-cell *matCellDef="let row"> {{ row.initialDate ? (row.initialDate | date: 'dd/MM/yyyy') : '-'  }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="deadline">
-              <th mat-header-cell *matHeaderCellDef> Data Final </th>
-              <td mat-cell *matCellDef="let row"> {{ row.deadline ? (row.deadline | date: 'dd/MM/yyyy') : '-' }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="edit">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row">
-                <ng-container>
-                  <div>
-                    <button mat-mini-fab class="edit-button" matTooltip="{{ 'CATEGORY.Editar' | translate }}"
-                      matTooltipPosition="below" (click)="openUpdateTaskDialog(row.id)">
-                      <mat-icon class="icon-table">edit</mat-icon>
-                    </button>
-                  </div>
-                </ng-container>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="delete">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row">
-                <ng-container>
-                  <div>
-                    <button mat-mini-fab class="delete-button" matTooltip="{{ 'CATEGORY.Deletar' | translate }}"
-                      matTooltipPosition="below" (click)="openDeleteTaskConfirmationDialog(row.id)">
-                      <mat-icon class="icon-table">delete</mat-icon>
-                    </button>
-                  </div>
-                </ng-container>
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
+          <mat-form-field style="margin-top: 15px; max-width: 250px; margin-right: 15px;" appearance="fill">
+            <mat-label>Prioridade</mat-label>
+            <mat-select multiple [(ngModel)]="todoTasksPrioritiesFilter"
+              (selectionChange)="filterTodoTasksByPriority()">
+              <mat-option value="1"
+                [disabled]="!todoTasksPrioritiesFilter.includes('2') && !todoTasksPrioritiesFilter.includes('3')">
+                Alta
+              </mat-option>
+              <mat-option value="2"
+                [disabled]="!todoTasksPrioritiesFilter.includes('1') && !todoTasksPrioritiesFilter.includes('3')">
+                Média
+              </mat-option>
+              <mat-option value="3"
+                [disabled]="!todoTasksPrioritiesFilter.includes('1') && !todoTasksPrioritiesFilter.includes('2')">
+                Baixa
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
-        <mat-paginator class="mt-3" *ngIf="todoTasksDataSource.filteredData.length > 0"
-          [length]="todoTasksDataSource.filteredData.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
-          [hidePageSize]="true" showFirstLastButtons>
+        <table mat-table *ngIf="!(todoTasksDataSource.data.length == 0 && todoTasksPrioritiesFilter.length == 3)"
+          [dataSource]="todoTasksDataSource" class="full-width-table" #todoTasksTable="matSort" matSort>
+
+          <ng-container matColumnDef="checkbox">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" [ngClass]="row.id == taskId ? 'notificationActive' : ''">
+              <ng-container>
+                <mat-checkbox [checked]="verifyIfTaskIsDone(row)" (click)="changeTaskStatus(row)"
+                  matTooltip="Concluir tarefa"></mat-checkbox>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="centerAlign">Descrição</th>
+            <td mat-cell *matCellDef="let row" class="centerAlign" [ngClass]="row.id == taskId ? 'notificationActive' : ''"> {{ row.description }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="centerAlign" class="centerAlign"> Prioridade
+            </th>
+            <td mat-cell *matCellDef="let row" class="centerAlign" [ngClass]="row.id == taskId ? 'notificationActive' : ''">
+              <mat-icon *ngIf="row.priority == '1'" style="color: #881111"> keyboard_arrow_up</mat-icon>
+              <mat-icon *ngIf="row.priority == '2'" style="color: #f3b737 "> keyboard_arrow_right</mat-icon>
+              <mat-icon *ngIf="row.priority == '3'" style="color: #007c11 "> keyboard_arrow_down</mat-icon>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="initialDate">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="centerAlign"> Data Inicial </th>
+            <td mat-cell *matCellDef="let row" class="centerAlign" [ngClass]="row.id == taskId ? 'notificationActive' : ''">
+              {{ row.initialDate ? (row.initialDate | date: 'dd/MM/yyyy') : '-'  }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="deadline">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="centerAlign"> Data Final </th>
+            <td mat-cell *matCellDef="let row" class="centerAlign" [ngClass]="row.id == taskId ? 'notificationActive' : ''">
+              {{ row.deadline ? (row.deadline | date: 'dd/MM/yyyy') : '-' }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" [ngClass]="row.id == taskId ? 'notificationActive' : ''">
+              <ng-container>
+                <div>
+                  <button mat-mini-fab class="edit-button" matTooltip="{{ 'CATEGORY.Editar' | translate }}"
+                    matTooltipPosition="below" (click)="openUpdateTaskDialog(row.id)">
+                    <mat-icon class="icon-table" >edit</mat-icon>
+                  </button>
+                </div>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" [ngClass]="row.id == taskId ? 'notificationActive' : ''">
+              <ng-container>
+                <div>
+                  <button mat-mini-fab class="delete-button" matTooltip="{{ 'CATEGORY.Deletar' | translate }}"
+                    matTooltipPosition="below" (click)="openDeleteTaskConfirmationDialog(row.id)">
+                    <mat-icon class="icon-table">delete</mat-icon>
+                  </button>
+                </div>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator #paginator1 class="mt-3" *ngIf="todoTasksDataSource.filteredData.length > 0"
+          [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons>
         </mat-paginator>
 
         <div *ngIf="todoTasksDataSource.filteredData.length == 0" class="empty-table">
@@ -97,83 +129,99 @@
     </mat-expansion-panel>
 
     <!--DONE TASKS-->
-    <mat-expansion-panel [expanded]="false" class="mb-3">
+    <mat-expansion-panel [expanded]="doneExpandedPanel" class="mb-3">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Tarefas Concluídas <em>({{doneTasksDataSource.filteredData.length}})</em>
+          Tarefas Concluídas <em>({{completeDoneTasksDataSource.data.length}})</em>
         </mat-panel-title>
       </mat-expansion-panel-header>
 
       <div class="table-area">
-        <div class="table-responsive">
-          <table *ngIf="doneTasksDataSource.filteredData.length > 0" mat-table [dataSource]="doneTasksDataSource"
-            class="full-width-table">
+        <div style="display: flex; margin-bottom: -1.25em; width: 100%;"
+          *ngIf="!(doneTasksDataSource.data.length == 0 && doneTasksPrioritiesFilter.length == 3)">
+          <mat-form-field style="margin-top: 15px; max-width: 250px; margin-right: 15px;" appearance="fill">
+            <mat-label>Filtrar tarefas
+              <small><em>(Descrição)</em></small>
+            </mat-label>
+            <input matInput #filterInputTask (keyup)="filterDoneTasks($event)">
+          </mat-form-field>
 
-            <ng-container matColumnDef="checkbox">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row">
-                <ng-container>
-                  <mat-checkbox [checked]="verifyIfTaskIsDone(row)" (click)="changeTaskStatus(row)"
-                    matTooltip="Retomar tarefa"></mat-checkbox>
-                </ng-container>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="description">
-              <th mat-header-cell *matHeaderCellDef> Descrição</th>
-              <td mat-cell *matCellDef="let row"> {{ row.description }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="priority">
-              <th mat-header-cell *matHeaderCellDef> Prioridade </th>
-              <td mat-cell *matCellDef="let row"> {{ row.priority }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="initialDate">
-              <th mat-header-cell *matHeaderCellDef> Data Inicial </th>
-              <td mat-cell *matCellDef="let row"> {{ row.initialDate ? (row.initialDate | date: 'dd/MM/yyyy') : '-'  }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="deadline">
-              <th mat-header-cell *matHeaderCellDef> Data Final </th>
-              <td mat-cell *matCellDef="let row"> {{ row.deadline ? (row.deadline | date: 'dd/MM/yyyy') : '-' }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="edit">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row">
-                <ng-container>
-                  <div>
-                    <button mat-mini-fab class="edit-button" matTooltip="{{ 'CATEGORY.Editar' | translate }}"
-                      matTooltipPosition="below" (click)="openUpdateTaskDialog(row.id)">
-                      <mat-icon class="icon-table">edit</mat-icon>
-                    </button>
-                  </div>
-                </ng-container>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="delete">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row">
-                <ng-container>
-                  <div>
-                    <button mat-mini-fab class="delete-button" matTooltip="{{ 'CATEGORY.Deletar' | translate }}"
-                      matTooltipPosition="below" (click)="openDeleteTaskConfirmationDialog(row.id)">
-                      <mat-icon class="icon-table">delete</mat-icon>
-                    </button>
-                  </div>
-                </ng-container>
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
+          <mat-form-field style="margin-top: 15px; max-width: 250px; margin-right: 15px;" appearance="fill">
+            <mat-label>Prioridade</mat-label>
+            <mat-select multiple [(ngModel)]="doneTasksPrioritiesFilter"
+              (selectionChange)="filterDoneTasksByPriority()">
+              <mat-option value="1"
+                [disabled]="!doneTasksPrioritiesFilter.includes('2') && !doneTasksPrioritiesFilter.includes('3')">
+                Alta
+              </mat-option>
+              <mat-option value="2"
+                [disabled]="!doneTasksPrioritiesFilter.includes('1') && !doneTasksPrioritiesFilter.includes('3')">
+                Média
+              </mat-option>
+              <mat-option value="3"
+                [disabled]="!doneTasksPrioritiesFilter.includes('1') && !doneTasksPrioritiesFilter.includes('2')">
+                Baixa
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
+        <table *ngIf="!(doneTasksDataSource.data.length == 0 && doneTasksPrioritiesFilter.length == 3)" mat-table
+          [dataSource]="doneTasksDataSource" class="full-width-table" #doneTasksTable="matSort" matSort>
 
-        <mat-paginator class="mt-3" *ngIf="doneTasksDataSource.filteredData.length > 0"
+          <ng-container matColumnDef="checkbox">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" [ngClass]="row.id == taskId ? 'notificationActive' : ''">
+              <ng-container>
+                <mat-checkbox [checked]="verifyIfTaskIsDone(row)" (click)="changeTaskStatus(row)"
+                  matTooltip="Retomar tarefa"></mat-checkbox>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header class="centerAlign"> Descrição</th>
+            <td mat-cell *matCellDef="let row" [ngClass]="row.id == taskId ? 'notificationActive' : ''"> {{ row.description }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef matSort class="centerAlign"> Prioridade </th>
+            <td mat-cell *matCellDef="let row" [ngClass]="row.id == taskId ? 'notificationActive' : ''">
+              <mat-icon *ngIf="row.priority == '1'" style="color: #881111"> keyboard_arrow_up</mat-icon>
+              <mat-icon *ngIf="row.priority == '2'" style="color: #f3b737 "> keyboard_arrow_right</mat-icon>
+              <mat-icon *ngIf="row.priority == '3'" style="color: #007c11 "> keyboard_arrow_down</mat-icon>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="initialDate">
+            <th mat-header-cell *matHeaderCellDef class="centerAlign"> Data Inicial </th>
+            <td mat-cell *matCellDef="let row" [ngClass]="row.id == taskId ? 'notificationActive' : ''"> {{ row.initialDate ? (row.initialDate | date: 'dd/MM/yyyy') : '-'  }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="deadline">
+            <th mat-header-cell *matHeaderCellDef class="centerAlign"> Data Final </th>
+            <td mat-cell *matCellDef="let row" [ngClass]="row.id == taskId ? 'notificationActive' : ''"> {{ row.deadline ? (row.deadline | date: 'dd/MM/yyyy') : '-' }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row" [ngClass]="row.id == taskId ? 'notificationActive' : ''">
+              <ng-container>
+                <div>
+                  <button mat-mini-fab class="delete-button" matTooltip="{{ 'CATEGORY.Deletar' | translate }}"
+                    matTooltipPosition="below" (click)="openDeleteTaskConfirmationDialog(row.id)">
+                    <mat-icon class="icon-table">delete</mat-icon>
+                  </button>
+                </div>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumn2"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumn2;"></tr>
+        </table>
+
+        <mat-paginator #paginator2 class="mt-3" *ngIf="doneTasksDataSource.filteredData.length > 0"
           [length]="doneTasksDataSource.filteredData.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
           [hidePageSize]="true" showFirstLastButtons>
         </mat-paginator>
@@ -188,85 +236,115 @@
     </mat-expansion-panel>
 
     <!-- NOT STARTED TASKS-->
-    <mat-expansion-panel [expanded]="false" class="mb-3">
+    <mat-expansion-panel [expanded]="notStartedExpandedPanel" class="mb-3">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Tarefas Não Iniciadas <em>({{notStartedTasksDataSource.filteredData.length}})</em>
+          Tarefas Não Iniciadas <em>({{completeNotStartedTasksDataSource.filteredData.length}})</em>
         </mat-panel-title>
       </mat-expansion-panel-header>
 
       <div class="table-area">
-        <div class="table-responsive">
-          <table mat-table *ngIf="notStartedTasksDataSource.filteredData.length > 0"
-            [dataSource]="notStartedTasksDataSource" class="full-width-table">
+        <div style="display: flex; margin-bottom: -1.25em; width: 100%;"
+          *ngIf="!(notStartedTasksDataSource.data.length == 0 && notStartedTasksPrioritiesFilter.length == 3)">
+          <mat-form-field style="margin-top: 15px; max-width: 250px; margin-right: 15px;" appearance="fill">
+            <mat-label>Filtrar tarefas
+              <small><em>(Descrição)</em></small>
+            </mat-label>
+            <input matInput #filterInputTask (keyup)="filterNotStartedTasks($event)">
+          </mat-form-field>
 
-            <ng-container matColumnDef="checkbox">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row">
-                <ng-container>
-                  <mat-checkbox [checked]="verifyIfTaskIsDone(row)" (click)="changeTaskStatus(row)"
-                    matTooltip="Concluir tarefa"></mat-checkbox>
-                </ng-container>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="description">
-              <th mat-header-cell *matHeaderCellDef> Descrição</th>
-              <td mat-cell *matCellDef="let row"> {{ row.description }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="priority">
-              <th mat-header-cell *matHeaderCellDef> Prioridade </th>
-              <td mat-cell *matCellDef="let row"> {{ row.priority }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="initialDate">
-              <th mat-header-cell *matHeaderCellDef> Data Inicial </th>
-              <td mat-cell *matCellDef="let row"> {{ row.initialDate ? (row.initialDate | date: 'dd/MM/yyyy') : '-' }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="deadline">
-              <th mat-header-cell *matHeaderCellDef> Data Final </th>
-              <td mat-cell *matCellDef="let row"> {{ row.deadline ? (row.deadline | date: 'dd/MM/yyyy') : '-' }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="edit">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row">
-                <ng-container>
-                  <div>
-                    <button mat-mini-fab class="edit-button" matTooltip="{{ 'CATEGORY.Editar' | translate }}"
-                      matTooltipPosition="below" (click)="openUpdateTaskDialog(row.id)">
-                      <mat-icon class="icon-table">edit</mat-icon>
-                    </button>
-                  </div>
-                </ng-container>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="delete">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row">
-                <ng-container>
-                  <div>
-                    <button mat-mini-fab class="delete-button" matTooltip="{{ 'CATEGORY.Deletar' | translate }}"
-                      matTooltipPosition="below" (click)="openDeleteTaskConfirmationDialog(row.id)">
-                      <mat-icon class="icon-table">delete</mat-icon>
-                    </button>
-                  </div>
-                </ng-container>
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
+          <mat-form-field style="margin-top: 15px; max-width: 250px; margin-right: 15px;" appearance="fill">
+            <mat-label>Prioridade</mat-label>
+            <mat-select multiple [(ngModel)]="notStartedTasksPrioritiesFilter"
+              (selectionChange)="filterNotStartedTasksByPriority()">
+              <mat-option value="1"
+                [disabled]="!notStartedTasksPrioritiesFilter.includes('2') && !notStartedTasksPrioritiesFilter.includes('3')">
+                Alta
+              </mat-option>
+              <mat-option value="2"
+                [disabled]="!notStartedTasksPrioritiesFilter.includes('1') && !notStartedTasksPrioritiesFilter.includes('3')">
+                Média
+              </mat-option>
+              <mat-option value="3"
+                [disabled]="!notStartedTasksPrioritiesFilter.includes('1') && !notStartedTasksPrioritiesFilter.includes('2')">
+                Baixa
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
+        <table mat-table
+          *ngIf="!(notStartedTasksDataSource.data.length == 0 && notStartedTasksPrioritiesFilter.length == 3)"
+          [dataSource]="notStartedTasksDataSource" class="full-width-table">
 
-        <mat-paginator class="mt-3" *ngIf="notStartedTasksDataSource.filteredData.length > 0"
-          [length]="notStartedTasksDataSource.filteredData.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
-          [hidePageSize]="true" showFirstLastButtons>
+          <ng-container matColumnDef="checkbox">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+              <ng-container>
+                <mat-checkbox [checked]="verifyIfTaskIsDone(row)" (click)="changeTaskStatus(row)"
+                  matTooltip="Concluir tarefa"></mat-checkbox>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef class="centerAlign"> Descrição</th>
+            <td mat-cell *matCellDef="let row"> {{ row.description }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef class="centerAlign"> Prioridade </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-icon *ngIf="row.priority == '1'" style="color: #881111"> keyboard_arrow_up</mat-icon>
+              <mat-icon *ngIf="row.priority == '2'" style="color: #f3b737 "> keyboard_arrow_right</mat-icon>
+              <mat-icon *ngIf="row.priority == '3'" style="color: #007c11 "> keyboard_arrow_down</mat-icon>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="initialDate" class="centerAlign">
+            <th mat-header-cell *matHeaderCellDef> Data Inicial </th>
+            <td mat-cell *matCellDef="let row"> {{ row.initialDate ? (row.initialDate | date: 'dd/MM/yyyy') : '-' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="deadline" class="centerAlign">
+            <th mat-header-cell *matHeaderCellDef> Data Final </th>
+            <td mat-cell *matCellDef="let row"> {{ row.deadline ? (row.deadline | date: 'dd/MM/yyyy') : '-' }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+              <ng-container>
+                <div>
+                  <button mat-mini-fab class="edit-button" matTooltip="{{ 'CATEGORY.Editar' | translate }}"
+                    matTooltipPosition="below" (click)="openUpdateTaskDialog(row.id)">
+                    <mat-icon class="icon-table">edit</mat-icon>
+                  </button>
+                </div>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+              <ng-container>
+                <div>
+                  <button mat-mini-fab class="delete-button" matTooltip="{{ 'CATEGORY.Deletar' | translate }}"
+                    matTooltipPosition="below" (click)="openDeleteTaskConfirmationDialog(row.id)">
+                    <mat-icon class="icon-table">delete</mat-icon>
+                  </button>
+                </div>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator #paginator3 class="mt-3" *ngIf="notStartedTasksDataSource.filteredData.length > 0"
+          [length]="notStartedTasksDataSource.filteredData.length" [pageSize]="5" showFirstLastButtons>
         </mat-paginator>
 
         <div *ngIf="notStartedTasksDataSource.filteredData.length == 0" class="empty-table">
@@ -279,83 +357,113 @@
     </mat-expansion-panel>
 
     <!-- EXPIRED TASKS-->
-    <mat-expansion-panel [expanded]="false" class="mb-3">
+    <mat-expansion-panel [expanded]="expiredExpandedPanel" class="mb-3">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Tarefas Expiradas <em>({{expiredTasksDataSource.filteredData.length}})</em>
+          Tarefas Expiradas <em>({{completeExpiredTasksDataSource.filteredData.length}})</em>
         </mat-panel-title>
       </mat-expansion-panel-header>
 
       <div class="table-area">
-        <div class="table-responsive">
-          <table mat-table *ngIf="expiredTasksDataSource.filteredData.length > 0" [dataSource]="expiredTasksDataSource"
-            class="full-width-table">
+        <div style="display: flex; margin-bottom: -1.25em; width: 100%;"
+          *ngIf="!(expiredTasksDataSource.data.length == 0 && expiredTasksPrioritiesFilter.length == 3)">
+          <mat-form-field style="margin-top: 15px; max-width: 250px; margin-right: 15px;" appearance="fill">
+            <mat-label>Filtrar tarefas
+              <small><em>(Descrição)</em></small>
+            </mat-label>
+            <input matInput #filterInputTask (keyup)="filterExpiredTasks($event)">
+          </mat-form-field>
 
-            <ng-container matColumnDef="checkbox">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row">
-                <ng-container>
-                  <mat-checkbox [checked]="verifyIfTaskIsDone(row)" (click)="changeTaskStatus(row)"
-                    matTooltip="Concluir tarefa"></mat-checkbox>
-                </ng-container>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="description">
-              <th mat-header-cell *matHeaderCellDef> Descrição</th>
-              <td mat-cell *matCellDef="let row"> {{ row.description }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="priority">
-              <th mat-header-cell *matHeaderCellDef> Prioridade </th>
-              <td mat-cell *matCellDef="let row"> {{ row.priority }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="initialDate">
-              <th mat-header-cell *matHeaderCellDef> Data Inicial </th>
-              <td mat-cell *matCellDef="let row"> {{ row.initialDate ? (row.initialDate | date: 'dd/MM/yyyy') : '-' }}
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="deadline">
-              <th mat-header-cell *matHeaderCellDef> Data Final </th>
-              <td mat-cell *matCellDef="let row"> {{ row.deadline ? (row.deadline | date: 'dd/MM/yyyy') : '-' }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="edit">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row">
-                <ng-container>
-                  <div>
-                    <button mat-mini-fab class="edit-button" matTooltip="{{ 'CATEGORY.Editar' | translate }}"
-                      matTooltipPosition="below" (click)="openUpdateTaskDialog(row.id)">
-                      <mat-icon class="icon-table"> edit</mat-icon>
-                    </button>
-                  </div>
-                </ng-container>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="delete">
-              <th mat-header-cell *matHeaderCellDef></th>
-              <td mat-cell *matCellDef="let row">
-                <ng-container>
-                  <div>
-                    <button mat-mini-fab class="delete-button" matTooltip="{{ 'CATEGORY.Deletar' | translate }}"
-                      matTooltipPosition="below" (click)="openDeleteTaskConfirmationDialog(row.id)">
-                      <mat-icon class="icon-table">delete</mat-icon>
-                    </button>
-                  </div>
-                </ng-container>
-              </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
+          <mat-form-field style="margin-top: 15px; max-width: 250px; margin-right: 15px;" appearance="fill">
+            <mat-label>Prioridade</mat-label>
+            <mat-select multiple [(ngModel)]="expiredTasksPrioritiesFilter"
+              (selectionChange)="filterExpiredTasksByPriority()">
+              <mat-option value="1"
+                [disabled]="!expiredTasksPrioritiesFilter.includes('2') && !expiredTasksPrioritiesFilter.includes('3')">
+                Alta
+              </mat-option>
+              <mat-option value="2"
+                [disabled]="!expiredTasksPrioritiesFilter.includes('1') && !expiredTasksPrioritiesFilter.includes('3')">
+                Média
+              </mat-option>
+              <mat-option value="3"
+                [disabled]="!expiredTasksPrioritiesFilter.includes('1') && !expiredTasksPrioritiesFilter.includes('2')">
+                Baixa
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
+        <table mat-table *ngIf="!(expiredTasksDataSource.data.length == 0 && expiredTasksPrioritiesFilter.length == 3)"
+          [dataSource]="expiredTasksDataSource" class="full-width-table">
 
-        <mat-paginator class="mt-3" *ngIf="expiredTasksDataSource.filteredData.length > 0"
+          <ng-container matColumnDef="checkbox">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+              <ng-container>
+                <mat-checkbox [checked]="verifyIfTaskIsDone(row)" (click)="changeTaskStatus(row)"
+                  matTooltip="Concluir tarefa"></mat-checkbox>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef class="centerAlign"> Descrição</th>
+            <td mat-cell *matCellDef="let row"> {{ row.description }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="priority">
+            <th mat-header-cell *matHeaderCellDef class="centerAlign"> Prioridade </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-icon *ngIf="row.priority == '1'" style="color: #881111"> keyboard_arrow_up</mat-icon>
+              <mat-icon *ngIf="row.priority == '2'" style="color: #f3b737 "> keyboard_arrow_right</mat-icon>
+              <mat-icon *ngIf="row.priority == '3'" style="color: #007c11 "> keyboard_arrow_down</mat-icon>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="initialDate">
+            <th mat-header-cell *matHeaderCellDef class="centerAlign"> Data Inicial </th>
+            <td mat-cell *matCellDef="let row"> {{ row.initialDate ? (row.initialDate | date: 'dd/MM/yyyy') : '-' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="deadline">
+            <th mat-header-cell *matHeaderCellDef class="centerAlign"> Data Final </th>
+            <td mat-cell *matCellDef="let row"> {{ row.deadline ? (row.deadline | date: 'dd/MM/yyyy') : '-' }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+              <ng-container>
+                <div>
+                  <button mat-mini-fab class="edit-button" matTooltip="{{ 'CATEGORY.Editar' | translate }}"
+                    matTooltipPosition="below" (click)="openUpdateTaskDialog(row.id)">
+                    <mat-icon class="icon-table"> edit</mat-icon>
+                  </button>
+                </div>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+              <ng-container>
+                <div>
+                  <button mat-mini-fab class="delete-button" matTooltip="{{ 'CATEGORY.Deletar' | translate }}"
+                    matTooltipPosition="below" (click)="openDeleteTaskConfirmationDialog(row.id)">
+                    <mat-icon class="icon-table">delete</mat-icon>
+                  </button>
+                </div>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator #paginator4 class="mt-3" *ngIf="expiredTasksDataSource.filteredData.length > 0"
           [length]="expiredTasksDataSource.filteredData.length" [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
           [hidePageSize]="true" showFirstLastButtons>
         </mat-paginator>

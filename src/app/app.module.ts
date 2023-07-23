@@ -46,8 +46,16 @@ import { ConfirmationDialogComponent } from './componentes/confirmation-dialog/c
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {MatChipsModule} from '@angular/material/chips';
-import { RemindersComponent } from './views/reminders/reminders.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatSelectModule} from '@angular/material/select';
+import { SemDadosDisponiveisComponent } from './componentes/sem-dados-disponiveis/sem-dados-disponiveis.component';
+import { MatSortModule } from '@angular/material/sort';
+import { NavNotificacoesComponent } from '../app/componentes/header/nav-notificacoes/nav-notificacoes.component';
+import { MatBadgeModule } from '@angular/material/badge';
+import {OverlayModule} from '@angular/cdk/overlay';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { NotificationsComponent } from './views/notifications/notifications.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +72,9 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     MyFilterPipe,
     LengthPipe,
     ConfirmationDialogComponent,
-    RemindersComponent
+    SemDadosDisponiveisComponent,
+    NavNotificacoesComponent,
+    NotificationsComponent
   ],
   imports: [
     MatChipsModule,
@@ -97,6 +107,12 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     SharedModule,
     MatPaginatorModule,
     MatDatepickerModule,
+    MatSlideToggleModule,
+    MatSelectModule,
+    MatSortModule,
+    MatBadgeModule,
+    OverlayModule,
+    MatButtonToggleModule,
     TranslateModule.forRoot(
       {
         loader: {

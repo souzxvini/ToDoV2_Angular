@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ModalAddTaskComponent } from './modal-add-task/modal-add-task/modal-add-task.component';
 import { Category } from './../../model/category.model';
 import { CategoryService } from 'src/app/services/category.service';
-import { Component, ViewChild} from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Status } from '../../model/status.model';
 import { Task } from 'src/app/model/task.model';
@@ -14,6 +14,7 @@ import { ConfirmationDialogComponent, ConfirmDialogModel } from 'src/app/compone
 import { ConclusionStatus } from 'src/app/model/conclusion-status.model';
 import { TranslateService } from '@ngx-translate/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { MatSort, Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-category',
@@ -22,18 +23,39 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class CategoryComponent {
 
+  taskId: number;
   categoryId: number;
   category: Category;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('paginator1') paginator1: MatPaginator;
+  @ViewChild('paginator2') paginator2: MatPaginator;
+  @ViewChild('paginator3') paginator3: MatPaginator;
+  @ViewChild('paginator4') paginator4: MatPaginator;
 
   categories: Category[];
   formFilters: any
   todoTasksDataSource = new MatTableDataSource<Task>([]);
+  completeTodoTasksDataSource = new MatTableDataSource<Task>([]);
   doneTasksDataSource = new MatTableDataSource<Task>([]);
+  completeDoneTasksDataSource = new MatTableDataSource<Task>([]);
   notStartedTasksDataSource = new MatTableDataSource<Task>([]);
+  completeNotStartedTasksDataSource = new MatTableDataSource<Task>([]);
   expiredTasksDataSource = new MatTableDataSource<Task>([]);
+  completeExpiredTasksDataSource = new MatTableDataSource<Task>([]);
   displayedColumns = ['checkbox', 'description', 'priority', 'initialDate', 'deadline', 'edit', 'delete']
   displayedColumn2 = ['checkbox', 'description', 'priority', 'initialDate', 'deadline', 'delete']
+
+  todoTasksPrioritiesFilter = ['1', '2', '3']
+  doneTasksPrioritiesFilter = ['1', '2', '3']
+  notStartedTasksPrioritiesFilter = ['1', '2', '3']
+  expiredTasksPrioritiesFilter = ['1', '2', '3']
+
+  todoExpandedPanel = false;
+  doneExpandedPanel = false;
+  notStartedExpandedPanel = false;
+  expiredExpandedPanel = false;
+
+  @ViewChild('todoTasksTable') sort1: MatSort;
+  @ViewChild('doneTasksTable') sort2: MatSort;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -43,13 +65,17 @@ export class CategoryComponent {
     private snackbar: MatSnackBar,
     private router: Router,
     private translateService: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
+      this.taskId = params['taskId'];
+    });
+
+    this.activatedRoute.params.subscribe(params => {
       this.categoryId = params['id'];
 
-      if(isNaN(this.categoryId) ){
+      if (isNaN(this.categoryId)) {
         this.router.navigate(['404'])
         return
       }
@@ -58,7 +84,7 @@ export class CategoryComponent {
         next: (data) => {
           if (data) {
             this.categories = data;
-            if(!this.categories.find(c => c.categoryId == this.categoryId)){
+            if (!this.categories.find(c => c.categoryId == this.categoryId)) {
               this.router.navigate(['404'])
               return
             }
@@ -67,26 +93,173 @@ export class CategoryComponent {
       });
 
       this.getCategory(this.categoryId);
+
     });
+
+
   }
 
-  getCategory(categoryId){
+  getCategory(categoryId) {
     this.categoryService.getCategory(categoryId).subscribe({
       next: (data) => {
         this.category = data
+        this.doneExpandedPanel = false;
+        this.notStartedExpandedPanel = false;
+        this.expiredExpandedPanel = false;
+
         this.todoTasksDataSource = new MatTableDataSource<Task>(data.todoTasks);
+        this.completeTodoTasksDataSource = new MatTableDataSource<Task>(data.todoTasks);
+        setTimeout(() => {
+          this.todoTasksDataSource.paginator = this.paginator1;
+          this.todoTasksDataSource.sort = this.sort1;
+        }, 0);
+        this.todoTasksPrioritiesFilter = ['1', '2', '3'];
+        this.todoTasksDataSource.filterPredicate = (data: any, filter: string) => {
+          if (data.description?.toLowerCase().trim().includes(filter)) {
+            return true
+          } else {
+            return false
+          }
+        }
+        this.todoTasksDataSource.sortingDataAccessor = (data: any, sortHeaderId: string): string => {
+
+          if (typeof data[sortHeaderId] === 'string') {
+            return data[sortHeaderId].toLocaleLowerCase();
+          }
+
+          return data[sortHeaderId];
+        };
+
         this.doneTasksDataSource = new MatTableDataSource<Task>(data.doneTasks);
+        this.completeDoneTasksDataSource = new MatTableDataSource<Task>(data.doneTasks);
+        setTimeout(() => {
+          this.doneTasksDataSource.paginator = this.paginator2;
+          this.doneTasksDataSource.sort = this.sort2;
+        }, 0);
+        this.doneTasksPrioritiesFilter = ['1', '2', '3']
+        this.doneTasksDataSource.filterPredicate = (data: any, filter: string) => {
+          if (data.description?.toLowerCase().trim().includes(filter)) {
+            return true
+          } else {
+            return false
+          }
+        }
+
         this.notStartedTasksDataSource = new MatTableDataSource<Task>(data.notStartedTasks);
+        this.completeNotStartedTasksDataSource = new MatTableDataSource<Task>(data.notStartedTasks);
+        setTimeout(() => {
+          this.notStartedTasksDataSource.paginator = this.paginator3;
+        }, 0);
+        this.notStartedTasksPrioritiesFilter = ['1', '2', '3']
+        this.notStartedTasksDataSource.filterPredicate = (data: any, filter: string) => {
+          if (data.description?.toLowerCase().trim().includes(filter)) {
+            return true
+          } else {
+            return false
+          }
+        }
+
         this.expiredTasksDataSource = new MatTableDataSource<Task>(data.expiredTasks);
-        this.todoTasksDataSource.paginator = this.paginator;
-        this.doneTasksDataSource.paginator = this.paginator;
-        this.notStartedTasksDataSource.paginator = this.paginator;
-        this.expiredTasksDataSource.paginator = this.paginator;
+        this.completeExpiredTasksDataSource = new MatTableDataSource<Task>(data.expiredTasks);
+        setTimeout(() => {
+          this.expiredTasksDataSource.paginator = this.paginator4;
+        }, 0);
+        this.expiredTasksPrioritiesFilter = ['1', '2', '3']
+        this.expiredTasksDataSource.filterPredicate = (data: any, filter: string) => {
+          if (data.description?.toLowerCase().trim().includes(filter)) {
+            return true
+          } else {
+            return false
+          }
+        }
+
+        setTimeout(() => {
+          const taskIndex = this.todoTasksDataSource.data.findIndex(task => task.id == this.taskId);
+
+          if (taskIndex !== -1) {
+            const pageIndex = Math.floor(taskIndex / this.paginator1.pageSize);
+            this.paginator1.pageIndex = pageIndex;
+            setTimeout(() => {
+              this.todoTasksDataSource.paginator = this.paginator1;
+            }, 0);
+            this.todoExpandedPanel = true;
+            console.log(pageIndex)
+          }
+        }, 0);
+
+        setTimeout(() => {
+          const taskIndex = this.todoTasksDataSource.data.findIndex(task => task.id == this.taskId);
+
+          if (taskIndex !== -1) {
+            const pageIndex = Math.floor(taskIndex / this.paginator1.pageSize);
+            this.paginator1.pageIndex = pageIndex;
+            setTimeout(() => {
+              this.todoTasksDataSource.paginator = this.paginator1;
+            }, 0);
+            this.todoExpandedPanel = true;
+          }
+
+        }, 0);
+
+        setTimeout(() => {
+          const taskIndex = this.doneTasksDataSource.data.findIndex(task => task.id == this.taskId);
+
+          if (taskIndex !== -1) {
+            const pageIndex = Math.floor(taskIndex / this.paginator2.pageSize);
+            this.paginator2.pageIndex = pageIndex;
+            setTimeout(() => {
+              this.doneTasksDataSource.paginator = this.paginator2;
+            }, 0);
+            this.doneExpandedPanel = true;
+          }
+        }, 0);
+
+        setTimeout(() => {
+          const taskIndex = this.notStartedTasksDataSource.data.findIndex(task => task.id == this.taskId);
+
+          if (taskIndex !== -1) {
+            const pageIndex = Math.floor(taskIndex / this.paginator3.pageSize);
+            this.paginator3.pageIndex = pageIndex;
+            setTimeout(() => {
+              this.notStartedTasksDataSource.paginator = this.paginator3;
+            }, 0);
+            this.notStartedExpandedPanel = true;
+          }
+        }, 0);
+
+        setTimeout(() => {
+          const taskIndex = this.expiredTasksDataSource.data.findIndex(task => task.id == this.taskId);
+
+          if (taskIndex !== -1) {
+            const pageIndex = Math.floor(taskIndex / this.paginator3.pageSize);
+            this.paginator3.pageIndex = pageIndex;
+            setTimeout(() => {
+              this.expiredTasksDataSource.paginator = this.paginator3;
+            }, 0);
+            this.expiredExpandedPanel = true;
+          }
+        }, 0);
+
+        this.adicionarOuvinteDeCliqueNaTela();
+
       }
     })
   }
 
-  deleteTask(id){
+  adicionarOuvinteDeCliqueNaTela() {
+    document.addEventListener('click', this.onClick.bind(this));
+  }
+
+  onClick(event: MouseEvent) {
+    const currentRoute = this.router.url;
+    if (currentRoute.includes('/category') && this.taskId ) {
+      console.log(this.taskId)
+      this.taskId = null;
+      console.log(null)
+    }
+  }
+
+  deleteTask(id) {
     this.taskService.deleteTask(id).subscribe({
       next: () => {
         this.snackbar.open(
@@ -100,7 +273,7 @@ export class CategoryComponent {
     })
   }
 
-  deleteCategory(id){
+  deleteCategory(id) {
     this.categoryService.deleteCategory(id).subscribe({
       next: () => {
         this.snackbar.open(
@@ -120,9 +293,9 @@ export class CategoryComponent {
       next: (data) => {
         if (data) {
           this.categories = data;
-          if(categoryDeleted && this.categories.length == 0){
+          if (categoryDeleted && this.categories.length == 0) {
             this.router.navigate([''])
-          } else if(categoryDeleted){
+          } else if (categoryDeleted) {
             this.router.navigate(['category', `${this.categories[0].categoryId}`])
           }
         }
@@ -130,20 +303,20 @@ export class CategoryComponent {
     });
   }
 
-  verifyIfTaskIsDone(task: Task){
-    if(task.status === Status.DONE){
+  verifyIfTaskIsDone(task: Task) {
+    if (task.status === Status.DONE) {
       return true;
     }
     return false;
   }
 
-  changeTaskStatus(task: Task){
+  changeTaskStatus(task: Task) {
     this.taskService.changeTaskStatus(task.id).subscribe({
       next: () => {
         this.getCategory(this.category.categoryId);
         this.taskService.onTaskChange();
-        if(task.status == Status.TO_DO){
-            this.snackbar.open(
+        if (task.status == Status.TO_DO) {
+          this.snackbar.open(
             this.translateService.instant('SNACKBAR.TarefaConcluida'),
             this.translateService.instant('SNACKBAR.Fechar'),
             { duration: 6000, panelClass: ['snackbarSuccess'] }
@@ -152,17 +325,6 @@ export class CategoryComponent {
 
       }
     })
-  }
-
-  checkPriority(priority: string){
-    if(priority == 'HIGH'){
-      return 'red';
-    }
-    if(priority == 'MEDIUM'){
-      return 'yellow';
-    }
-
-    return 'green';
   }
 
   openModalAddTask(keepOpen: boolean) {
@@ -178,7 +340,7 @@ export class CategoryComponent {
     dialogRef.componentInstance.category = this.category;
 
     dialogRef.afterClosed().subscribe((data) => {
-      if (data.keepOpen) {
+      if (data?.keepOpen) {
         this.getCategory(this.categoryId);
         this.openModalAddTask(true);
       }
@@ -209,7 +371,7 @@ export class CategoryComponent {
     });
   }
 
-  openUpdateTaskDialog(taskId){
+  openUpdateTaskDialog(taskId) {
     const dialogRef = this.dialog.open(ModalUpdateTaskComponent, {
       width: '500px',
       panelClass: 'modalStyle',
@@ -248,43 +410,77 @@ export class CategoryComponent {
     });
   }
 
-  conclusionStatusMessage(conclusionStatus: ConclusionStatus){
-    if(conclusionStatus === ConclusionStatus.WITHIN_TIME){
-      return "Done Within Time";
-    }
-    if(conclusionStatus === ConclusionStatus.OUT_OF_TIME){
-      return "Done Out Of Time";
-    }
-    if(conclusionStatus === ConclusionStatus.BEFORE_START_TIME){
-      return "Done Before Start Time";
-    }
-    return false;
+  filterTodoTasks(event) {
+    const filterValue = event.target.value.trim().toLowerCase();
+    this.todoTasksDataSource.filter = filterValue;
   }
 
-  conclusionStatusIcon(conclusionStatus: ConclusionStatus){
-    if(conclusionStatus === ConclusionStatus.WITHIN_TIME){
-      return "assignment_turned_in";
-    }
-    if(conclusionStatus === ConclusionStatus.OUT_OF_TIME){
-      return "report_off";
-    }
-    if(conclusionStatus === ConclusionStatus.BEFORE_START_TIME){
-      return "report";
-    }
-    return false;
+  filterDoneTasks(event) {
+    const filterValue = event.target.value.trim().toLowerCase();
+    this.doneTasksDataSource.filter = filterValue;
   }
 
-  conclusionStatusIconColor(conclusionStatus: ConclusionStatus){
-    if(conclusionStatus === ConclusionStatus.WITHIN_TIME){
-      return "green";
-    }
-    if(conclusionStatus === ConclusionStatus.OUT_OF_TIME){
-      return "red";
-    }
-    if(conclusionStatus === ConclusionStatus.BEFORE_START_TIME){
-      return "yellow";
-    }
-    return "";
+  filterExpiredTasks(event) {
+    const filterValue = event.target.value.trim().toLowerCase();
+    this.expiredTasksDataSource.filter = filterValue;
   }
 
+  filterNotStartedTasks(event) {
+    const filterValue = event.target.value.trim().toLowerCase();
+    this.notStartedTasksDataSource.filter = filterValue;
+  }
+
+  filterTodoTasksByPriority() {
+    this.todoTasksDataSource.data = this.completeTodoTasksDataSource.data;
+
+    if (this.todoTasksPrioritiesFilter.length == 1) {
+      this.todoTasksDataSource.data = this.todoTasksDataSource.data.filter(item => item.priority == this.todoTasksPrioritiesFilter[0]);
+    }
+
+    if (this.todoTasksPrioritiesFilter.length == 2) {
+      this.todoTasksDataSource.data = this.todoTasksDataSource.data.filter(item => (item.priority == this.todoTasksPrioritiesFilter[0] || item.priority == this.todoTasksPrioritiesFilter[1]));
+    }
+
+    setTimeout(() => {
+      this.todoTasksDataSource.paginator = this.paginator1;
+    }, 0);
+
+  }
+
+  filterDoneTasksByPriority() {
+    this.doneTasksDataSource.data = this.completeDoneTasksDataSource.data;
+
+    if (this.doneTasksPrioritiesFilter.length == 1) {
+      this.doneTasksDataSource.data = this.doneTasksDataSource.data.filter(item => item.priority == this.doneTasksPrioritiesFilter[0]);
+    }
+
+    if (this.doneTasksPrioritiesFilter.length == 2) {
+      this.doneTasksDataSource.data = this.doneTasksDataSource.data.filter(item => (item.priority == this.doneTasksPrioritiesFilter[0] || item.priority == this.doneTasksPrioritiesFilter[1]));
+    }
+  }
+
+  filterNotStartedTasksByPriority() {
+    this.notStartedTasksDataSource.data = this.completeNotStartedTasksDataSource.data;
+
+    if (this.notStartedTasksPrioritiesFilter.length == 1) {
+      this.notStartedTasksDataSource.data = this.notStartedTasksDataSource.data.filter(item => item.priority == this.notStartedTasksPrioritiesFilter[0]);
+    }
+
+    if (this.notStartedTasksPrioritiesFilter.length == 2) {
+      this.notStartedTasksDataSource.data = this.notStartedTasksDataSource.data.filter(item => (item.priority == this.notStartedTasksPrioritiesFilter[0] || item.priority == this.notStartedTasksPrioritiesFilter[1]));
+    }
+  }
+
+  filterExpiredTasksByPriority() {
+    this.expiredTasksDataSource.data = this.completeExpiredTasksDataSource.data;
+
+    if (this.expiredTasksPrioritiesFilter.length == 1) {
+      this.expiredTasksDataSource.data = this.expiredTasksDataSource.data.filter(item => item.priority == this.expiredTasksPrioritiesFilter[0]);
+    }
+
+    if (this.expiredTasksPrioritiesFilter.length == 2) {
+      this.expiredTasksDataSource.data = this.expiredTasksDataSource.data.filter(item => (item.priority == this.expiredTasksPrioritiesFilter[0] || item.priority == this.expiredTasksPrioritiesFilter[1]));
+    }
+
+  }
 }

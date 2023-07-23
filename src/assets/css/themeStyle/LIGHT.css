@@ -27,13 +27,12 @@
 
   /*Mat-Card*/
   --matCardBackgroundColor: rgb(0, 0, 0, 0.05);
-  --taskCardBackgroundColor: rgb(0, 0, 0, 0.1 );
   --matCardTaskDetailsBackgroundColor: rgb(0, 0, 0, 0.15);
 
   /*Mat-Form-Field*/
   --matFormFieldTextColor: rgb(0, 0, 0);
   --matFormFieldDisabledTextColor: rgb(0, 0, 0);
-  --matFormFieldBackgroundFillColor: rgba(0, 0, 0, 0.15);
+  --matFormFieldBackgroundFillColor: rgb(233, 233, 233) ;
 
   /*Mat-Tab*/
   --matTabLabelTextColor: rgb(0, 0, 0);
@@ -50,6 +49,9 @@
  --menuMatExpansionExpandedBackgroundColor: rgb(0, 0, 0, 0.05);
  --menuMatExpansionMatNavListBackgroundColor: rgb(233, 233, 233) ;
  --matExpansionMenuTextColor: rgb(0, 0, 0) ;
+
+ /*Div*/
+ --DivMatCardBackgroundColor: rgb(233, 233, 233) ;
 
   /*Category Category Card*/
   --categoryCardTitleColor: rgb(0, 0, 0);
@@ -72,21 +74,23 @@
   --matDatePickerBackgroundColor: rgb(210, 210, 210);
   --matDatePickerTextColor: rgb(0, 0, 0);
 
-  /*Calendar*/
-  --remindersCalendarBackgroundColor: rgb(233, 233, 233) ;
-  --remindersCalendarTextColor: rgb(0, 0, 0);
-
   /*Login*/
   --loginTitleColor: rgb(0, 0, 0);
   --linksColor: rgb(58, 58, 58);
   --linksHoverColor: rgb(0, 0, 0);
 
     /*Table*/
-  --tableRowHoverColor: rgba(250, 0, 0, 0.005);
+  --tableRowHoverColor: rgb(216, 216, 216);
   --tableThBackgroundColor: rgba(0, 0, 0, 0.1);
   --tableThTextColor: rgb(0, 0, 0);
   --tableTdTextColor: rgb(0, 0, 0);
-  --tableBackgroundColor: rgb(216, 216, 216);
+  --tableBackgroundColor: rgba(231, 231, 231, 1);
   --emptyTableBackgroundColor: rgb(216, 216, 216);
+
+  /*Mat Slid Toggle*/
+  --toggleDisabledColor: rgb(59, 59, 59);
+
+  /*Notificacoes card*/
+  --notificationPanelBackgroundColor: rgb(210, 210, 210);
 }
 

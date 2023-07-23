@@ -4,7 +4,7 @@
   --sidenavColor: rgb(255, 255, 255);
   --sidenavExpansionMenuBodyExpandedFontColor: rgb(255, 255, 255);
   --sidenavExpansionMenuBodyExpandedFontColorHover: rgb(255, 255, 255);
-  --addCategoryButtonBackgroundColor: rgb(0, 135, 212) ;
+  --addCategoryButtonBackgroundColor: rgb(0, 135, 212);
   --addCategoryButtonColor: rgb(255, 255, 255);
   --menuTitle: rgb(255, 255, 255);
   --menuTitleShadow: rgb(0, 0, 0);
@@ -26,8 +26,7 @@
   --checkboxBorderColor: rgb(255, 255, 255);
 
  /*Mat-Card*/
- --matCardBackgroundColor: rgb(0, 0, 0, 0.1);
- --taskCardBackgroundColor: rgb(0, 0, 0, 0.1 );
+ --matCardBackgroundColor: rgb(31, 30, 30);
  --matCardTaskDetailsBackgroundColor: rgb(0, 0, 0, 0.15);
 
  /*Mat-Form-Field*/
@@ -50,6 +49,9 @@
  --menuMatExpansionExpandedBackgroundColor: rgb(0, 0, 0, 0.2);
  --menuMatExpansionMatNavListBackgroundColor: rgb(0, 0, 0, 0.4) ;
  --matExpansionMenuTextColor: rgba(255, 255, 255) ;
+
+ /*Div*/
+ --DivMatCardBackgroundColor: rgb(44, 43, 43);
 
  /*Category Category Card*/
  --categoryCardTitleColor: rgb(255, 255, 255);
@@ -78,11 +80,17 @@
  --linksHoverColor: rgb(255, 255, 255);
 
    /*Table*/
-  --tableThBackgroundColor: rgb(0, 0, 0, 0.4);
+  --tableThBackgroundColor: rgba(0, 0, 0, 0.4);
   --tableThTextColor: rgba(255, 255, 255);
   --tableRowHoverColor: rgba(255, 255, 255, 0.1);
   --tableTdTextColor: rgba(255, 255, 255);
   --tableBackgroundColor: rgb(44, 43, 43);
   --emptyTableBackgroundColor: rgb(44, 43, 43);
+
+  /*Mat Slid Toggle*/
+  --toggleDisabledColor: rgb(172, 172, 172);
+
+  /*Notificacoes card*/
+  --notificationPanelBackgroundColor: rgb(31, 30, 30);
 
 }

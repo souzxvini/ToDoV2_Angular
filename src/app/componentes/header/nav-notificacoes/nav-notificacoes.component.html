@@ -1,0 +1,55 @@
+<!-- Botão Notifications -->
+<button mat-icon-button matTooltip="Notificações" (click)="notificationPanelState = !notificationPanelState"
+  cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+  <mat-icon *ngIf="unreadNotificationsList.length >= 1" [matBadge]="unreadNotificationsList.length" matBadgeSize="small"
+    [matBadgeHidden]="!loaded">notifications</mat-icon>
+
+  <mat-icon *ngIf="unreadNotificationsList.length == 0">notifications_none</mat-icon>
+</button>
+
+<!-- Panel Notifications -->
+<ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="notificationPanelState" [cdkConnectedOverlayHasBackdrop]="true"
+  (backdropClick)="setAllAsVisualized()" cdkConnectedOverlayBackdropClass="overlayStyleBackdrop">
+  <div class="notificationPanel mat-elevation-z8">
+
+    <div class="notificationPanelTitle">
+      <strong>Notificações</strong>
+    </div>
+
+    <div class="mt-2">
+      <button class="notificationButton" (click)="notificationsStatus = 'all'"
+        [class.notificationButtonActive]="notificationsStatus == 'all'" [disabled]="!loaded">
+        Todas
+      </button>
+      <button class="notificationButton" (click)="notificationsStatus = 'unread'"
+        [class.notificationButtonActive]="notificationsStatus == 'unread'" [disabled]="!loaded">
+        Não lidas
+      </button>
+    </div>
+
+    <div *ngIf="notificationsStatus == 'all'">
+
+      <div class="mt-2" [ngClass]="!notification.visualized ? 'newNotificationCard' : 'notificationCard'"
+        *ngFor="let notification of allNotificationsList" (click)="viewNotificationDetails(notification)"
+        matTooltip="Clique para ver detalhes." matTooltipPosition="left">
+        <strong style="word-wrap: break-word; font-weight: 900 !important;">
+          {{notification.title}}
+        </strong>
+        <div style="display: flex; width: 100%">
+          <div style="width: 90%;">
+            <div style="word-wrap: break-word;">
+              {{notification.description}}
+            </div>
+            <small style="color: rgb(0, 135, 212);">
+              {{notification.date}}
+            </small>
+          </div>
+          <div class="notificationReadIcon" *ngIf="!notification.clicked">
+            <mat-icon>fiber_manual_record</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

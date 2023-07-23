@@ -44,6 +44,8 @@ export class HomeComponent implements OnInit {
     this.categoryService.categoryChange$.subscribe(() => {
       this.getCategories();
     });
+
+    this.verificarChartData()
   }
 
   getActivity() {

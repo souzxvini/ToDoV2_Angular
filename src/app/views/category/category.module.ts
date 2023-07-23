@@ -34,6 +34,7 @@ import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-transla
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { MatSortModule } from '@angular/material/sort';
 
 @NgModule({
   declarations: [
@@ -71,6 +72,7 @@ import { NgxUiLoaderModule } from 'ngx-ui-loader';
     SharedModule,
     MatPaginatorModule,
     NgxUiLoaderModule,
+    MatSortModule,
     TranslateModule.forChild(
       {
         loader: {

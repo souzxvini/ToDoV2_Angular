@@ -19,7 +19,31 @@ export class ModalAddTaskComponent implements OnInit {
   loading = false;
   category: Category;
   formTask: FormGroup;
-  priorities: string[] = [];
+  priorities = [
+    {
+      icon: 'keyboard_arrow_up',
+      viewValue: 'Alta',
+      class: 'high-priority',
+      value: 1
+    }, {
+      icon: 'keyboard_arrow_right',
+      viewValue: 'Média',
+      class: 'medium-priority',
+      value: 2
+    }, {
+      icon: 'keyboard_arrow_down',
+      viewValue: 'Baixa',
+      class: 'low-priority',
+      value: 3
+    },
+  ];
+
+  selected = {
+    icon: 'keyboard_arrow_down',
+    viewValue: 'Baixa',
+    class: 'low-priority',
+    value: 3
+  };
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -27,13 +51,11 @@ export class ModalAddTaskComponent implements OnInit {
     private dialogRef: MatDialogRef<ModalAddTaskComponent>,
     private snackbar: MatSnackBar,
     private translateService: TranslateService
-    ) {
+  ) {
 
   }
 
   ngOnInit(): void {
-    this.getPriorities();
-
     this.formTask = this.fb.group({
       description: [null, Validators.required],
       categoryId: [null, Validators.required],
@@ -43,24 +65,24 @@ export class ModalAddTaskComponent implements OnInit {
     });
 
     this.formTask.valueChanges.subscribe(() => {
-      if(!this.formTask.get('initialDate').value || !this.formTask.get('deadline').value){
-        this.formTask.get('initialDate').setErrors( null)
-        this.formTask.get('deadline').setErrors( null)
+      if (!this.formTask.get('initialDate').value || !this.formTask.get('deadline').value) {
+        this.formTask.get('initialDate').setErrors(null)
+        this.formTask.get('deadline').setErrors(null)
         return;
       }
-      if(this.formTask.get('initialDate').value.getTime() > this.formTask.get('deadline').value.getTime()){
-        this.formTask.get('initialDate').setErrors({invalido: true})
-        this.formTask.get('deadline').setErrors({invalido: true})
-      }else{
-        this.formTask.get('initialDate').setErrors( null)
-        this.formTask.get('deadline').setErrors( null)
+      if (this.formTask.get('initialDate').value.getTime() > this.formTask.get('deadline').value.getTime()) {
+        this.formTask.get('initialDate').setErrors({ invalido: true })
+        this.formTask.get('deadline').setErrors({ invalido: true })
+      } else {
+        this.formTask.get('initialDate').setErrors(null)
+        this.formTask.get('deadline').setErrors(null)
       }
     })
 
     this.formTask.get('categoryId').setValue(this.category.categoryId)
   }
 
-  createTask(form){
+  createTask(form) {
     this.taskService.createTask(form).subscribe({
       next: () => {
         this.snackbar.open(
@@ -69,18 +91,17 @@ export class ModalAddTaskComponent implements OnInit {
           { duration: 6000, panelClass: ['snackbarSuccess'] }
         );
         this.taskService.onTaskChange();
-        if(this.keepOpen){
+        if (this.keepOpen) {
           this.dialogRef.close({ keepOpen: true });
-        } else{
+        } else {
           this.dialogRef.close(true);
         }
       }
     })
   }
 
-  getPriorities() {
-    this.priorities = Object.values(Priority);
+  setPriority(){
+    this.formTask.controls['priority'].setValue(this.selected.value);
   }
-
 
 }

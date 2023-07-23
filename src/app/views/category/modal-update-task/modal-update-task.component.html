@@ -16,9 +16,12 @@
 
       <mat-form-field appearance="fill">
         <mat-label> {{ 'CATEGORY_MODAL_UPDATE_TASK.Prioridade' | translate }} </mat-label>
-        <mat-select formControlName="priority"  disableOptionCentering>
+        <mat-select [(value)]="selected" formControlName="priority" (selectionChange)="setPriority()">
+          <mat-select-trigger class="select-trigger-align">
+            <mat-icon [ngClass]="selected?.class">{{selected?.icon}}</mat-icon><span>{{selected?.viewValue}}</span>
+          </mat-select-trigger>
           <mat-option *ngFor="let priority of priorities" [value]="priority">
-            {{priority}}
+            <mat-icon [ngClass]="priority.class">{{priority.icon}}</mat-icon>{{priority.viewValue}}
           </mat-option>
         </mat-select>
       </mat-form-field>

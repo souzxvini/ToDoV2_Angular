@@ -19,7 +19,7 @@ const routes: Routes = [
       { path: '', redirectTo: '/home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent },
       { path: 'category', loadChildren: () => import('./views/category/category.module').then(m => m.CategoryModule) },
-      { path: 'reminders', loadChildren: () => import('./views/reminders/reminders.module').then(m => m.RemindersModule) }
+      { path: 'notifications', loadChildren: () => import('./views/notifications/notifications.module').then(m => m.NotificationsModule) }
     ]
   },
   {

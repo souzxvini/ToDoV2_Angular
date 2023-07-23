@@ -15,6 +15,7 @@ export class CreateCategoryModalComponent implements OnInit {
 
   keepOpen: boolean
   loading = false
+
   constructor(
     private fb: UntypedFormBuilder,
     private categoryService: CategoryService,

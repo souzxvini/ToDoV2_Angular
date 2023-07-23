@@ -11,7 +11,7 @@ export class Task{
   category: Category
   initialDate: Date
   deadline: Date
-  priority: Priority
+  priority: string
   categoryId: number
   categoryName: string
 }

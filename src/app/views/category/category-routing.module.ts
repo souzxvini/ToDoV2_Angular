@@ -6,6 +6,10 @@ const routes: Routes = [
   {
     path:':id',
     component: CategoryComponent
+  },
+  {
+    path:':id/:taskId',
+    component: CategoryComponent
   }
 ];
 

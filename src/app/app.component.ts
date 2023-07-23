@@ -10,7 +10,6 @@ import { DOCUMENT } from '@angular/common';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'quiz';
 
   constructor(
     @Inject(DOCUMENT) private document: Document,

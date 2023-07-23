@@ -1,4 +1,4 @@
-<div style="display: flex; justify-content: space-between; vertical-align: auto;" >
+<div style="display: flex; justify-content: space-between; vertical-align: auto;">
   <h1 mat-dialog-title> {{ 'CATEGORY_MODAL_ADD_TASK.AdicionarTarefa' | translate }} </h1>
   <button mat-icon-button mat-dialog-close class="pHover">
     <mat-icon>close</mat-icon>
@@ -8,32 +8,36 @@
 
   <form [formGroup]="formTask" (ngSubmit)="createTask(formTask.value)">
     <div class="mt-3">
-        <mat-form-field appearance="fill">
-          <mat-label> {{ 'CATEGORY_MODAL_ADD_TASK.Categoria' | translate }} </mat-label>
-          <input matInput [value]="category.name" disabled>
-        </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label> {{ 'CATEGORY_MODAL_ADD_TASK.Categoria' | translate }} </mat-label>
+        <input matInput [value]="category.name" disabled>
+      </mat-form-field>
 
-        <mat-form-field appearance="fill">
-          <mat-label> {{ 'CATEGORY_MODAL_ADD_TASK.Descricao' | translate }} </mat-label>
-          <textarea matInput formControlName="description" rows="4"></textarea>
-        </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label> {{ 'CATEGORY_MODAL_ADD_TASK.Descricao' | translate }} </mat-label>
+        <textarea matInput formControlName="description" rows="4"></textarea>
+      </mat-form-field>
 
       <mat-form-field appearance="fill">
         <mat-label> {{ 'CATEGORY_MODAL_ADD_TASK.Prioridade' | translate }} </mat-label>
-        <mat-select formControlName="priority"  disableOptionCentering>
+        <mat-select [(value)]="selected" formControlName="priority" (selectionChange)="setPriority()">
+          <mat-select-trigger class="select-trigger-align">
+            <mat-icon [ngClass]="selected?.class">{{selected?.icon}}</mat-icon><span>{{selected?.viewValue}}</span>
+          </mat-select-trigger>
           <mat-option *ngFor="let priority of priorities" [value]="priority">
-            {{priority}}
+            <mat-icon [ngClass]="priority.class">{{priority.icon}}</mat-icon>{{priority.viewValue}}
           </mat-option>
         </mat-select>
       </mat-form-field>
 
       <app-message *ngIf="formTask.get('initialDate')?.errors?.['invalido'] && formTask.get('initialDate')?.touched"
-          message=" {{ 'CATEGORY_MODAL_ADD_TASK.DataInicialMaiorQueFinal' | translate }} " class="text-start">
+        message=" {{ 'CATEGORY_MODAL_ADD_TASK.DataInicialMaiorQueFinal' | translate }} " class="text-start">
       </app-message>
-      <mat-form-field appearance="fill" class="example-form-field" [ngClass]="formTask.get('initialDate')?.errors?.['invalido'] ? 'mat-form-field-error' : ''">
+      <mat-form-field appearance="fill" class="example-form-field"
+        [ngClass]="formTask.get('initialDate')?.errors?.['invalido'] ? 'mat-form-field-error' : ''">
         <mat-label> {{ 'CATEGORY_MODAL_ADD_TASK.DataInicial' | translate }} </mat-label>
-        <input matInput [matDatepicker]="datepicker" formControlName="initialDate" placeholder="{{ 'CATEGORY_MODAL_ADD_TASK.SelecioneUmaData' | translate }} "
-          readonly>
+        <input matInput [matDatepicker]="datepicker" formControlName="initialDate"
+          placeholder="{{ 'CATEGORY_MODAL_ADD_TASK.SelecioneUmaData' | translate }} " readonly>
         <mat-datepicker-toggle matSuffix [for]="datepicker"></mat-datepicker-toggle>
         <mat-datepicker #datepicker>
         </mat-datepicker>
@@ -43,8 +47,8 @@
 
       <mat-form-field appearance="fill">
         <mat-label> {{ 'CATEGORY_MODAL_ADD_TASK.DataFinal' | translate }} </mat-label>
-        <input matInput [matDatepicker]="datepicker2" formControlName="deadline" placeholder=" {{ 'CATEGORY_MODAL_ADD_TASK.SelecioneUmaData' | translate }} "
-          readonly>
+        <input matInput [matDatepicker]="datepicker2" formControlName="deadline"
+          placeholder=" {{ 'CATEGORY_MODAL_ADD_TASK.SelecioneUmaData' | translate }} " readonly>
         <mat-datepicker-toggle matSuffix [for]="datepicker2"></mat-datepicker-toggle>
         <mat-datepicker #datepicker2>
         </mat-datepicker>
