@@ -173,89 +173,76 @@ export class CategoryComponent {
           }
         }
 
-        setTimeout(() => {
-          const taskIndex = this.todoTasksDataSource.data.findIndex(task => task.id == this.taskId);
-
-          if (taskIndex !== -1) {
-            const pageIndex = Math.floor(taskIndex / this.paginator1.pageSize);
-            this.paginator1.pageIndex = pageIndex;
-            setTimeout(() => {
-              this.todoTasksDataSource.paginator = this.paginator1;
-            }, 0);
-            this.todoExpandedPanel = true;
-            console.log(pageIndex)
-          }
-        }, 0);
-
-        setTimeout(() => {
-          const taskIndex = this.todoTasksDataSource.data.findIndex(task => task.id == this.taskId);
-
-          if (taskIndex !== -1) {
-            const pageIndex = Math.floor(taskIndex / this.paginator1.pageSize);
-            this.paginator1.pageIndex = pageIndex;
-            setTimeout(() => {
-              this.todoTasksDataSource.paginator = this.paginator1;
-            }, 0);
-            this.todoExpandedPanel = true;
-          }
-
-        }, 0);
-
-        setTimeout(() => {
-          const taskIndex = this.doneTasksDataSource.data.findIndex(task => task.id == this.taskId);
-
-          if (taskIndex !== -1) {
-            const pageIndex = Math.floor(taskIndex / this.paginator2.pageSize);
-            this.paginator2.pageIndex = pageIndex;
-            setTimeout(() => {
-              this.doneTasksDataSource.paginator = this.paginator2;
-            }, 0);
-            this.doneExpandedPanel = true;
-          }
-        }, 0);
-
-        setTimeout(() => {
-          const taskIndex = this.notStartedTasksDataSource.data.findIndex(task => task.id == this.taskId);
-
-          if (taskIndex !== -1) {
-            const pageIndex = Math.floor(taskIndex / this.paginator3.pageSize);
-            this.paginator3.pageIndex = pageIndex;
-            setTimeout(() => {
-              this.notStartedTasksDataSource.paginator = this.paginator3;
-            }, 0);
-            this.notStartedExpandedPanel = true;
-          }
-        }, 0);
-
-        setTimeout(() => {
-          const taskIndex = this.expiredTasksDataSource.data.findIndex(task => task.id == this.taskId);
-
-          if (taskIndex !== -1) {
-            const pageIndex = Math.floor(taskIndex / this.paginator3.pageSize);
-            this.paginator3.pageIndex = pageIndex;
-            setTimeout(() => {
-              this.expiredTasksDataSource.paginator = this.paginator3;
-            }, 0);
-            this.expiredExpandedPanel = true;
-          }
-        }, 0);
-
+        this.redirectToTask();
         this.adicionarOuvinteDeCliqueNaTela();
 
       }
     })
   }
 
+  redirectToTask(){
+    setTimeout(() => {
+      const taskIndex = this.todoTasksDataSource.data.findIndex(task => task.id == this.taskId);
+
+      if (taskIndex !== -1) {
+        const pageIndex = Math.floor(taskIndex / this.paginator1.pageSize);
+        this.paginator1.pageIndex = pageIndex;
+        setTimeout(() => {
+          this.todoTasksDataSource.paginator = this.paginator1;
+        }, 0);
+        this.todoExpandedPanel = true;
+      }
+
+    }, 0);
+
+    setTimeout(() => {
+      const taskIndex = this.doneTasksDataSource.data.findIndex(task => task.id == this.taskId);
+
+      if (taskIndex !== -1) {
+        const pageIndex = Math.floor(taskIndex / this.paginator2.pageSize);
+        this.paginator2.pageIndex = pageIndex;
+        setTimeout(() => {
+          this.doneTasksDataSource.paginator = this.paginator2;
+        }, 0);
+        this.doneExpandedPanel = true;
+      }
+    }, 0);
+
+    setTimeout(() => {
+      const taskIndex = this.notStartedTasksDataSource.data.findIndex(task => task.id == this.taskId);
+
+      if (taskIndex !== -1) {
+        const pageIndex = Math.floor(taskIndex / this.paginator3.pageSize);
+        this.paginator3.pageIndex = pageIndex;
+        setTimeout(() => {
+          this.notStartedTasksDataSource.paginator = this.paginator3;
+        }, 0);
+        this.notStartedExpandedPanel = true;
+      }
+    }, 0);
+
+    setTimeout(() => {
+      const taskIndex = this.expiredTasksDataSource.data.findIndex(task => task.id == this.taskId);
+
+      if (taskIndex !== -1) {
+        const pageIndex = Math.floor(taskIndex / this.paginator3.pageSize);
+        this.paginator3.pageIndex = pageIndex;
+        setTimeout(() => {
+          this.expiredTasksDataSource.paginator = this.paginator3;
+        }, 0);
+        this.expiredExpandedPanel = true;
+      }
+    }, 0);
+  }
+
   adicionarOuvinteDeCliqueNaTela() {
     document.addEventListener('click', this.onClick.bind(this));
   }
 
-  onClick(event: MouseEvent) {
+  onClick() {
     const currentRoute = this.router.url;
     if (currentRoute.includes('/category') && this.taskId ) {
-      console.log(this.taskId)
       this.taskId = null;
-      console.log(null)
     }
   }
 
@@ -410,77 +397,25 @@ export class CategoryComponent {
     });
   }
 
-  filterTodoTasks(event) {
+  filterTasks(datasource, event) {
     const filterValue = event.target.value.trim().toLowerCase();
-    this.todoTasksDataSource.filter = filterValue;
+    this[datasource].filter = filterValue;
   }
 
-  filterDoneTasks(event) {
-    const filterValue = event.target.value.trim().toLowerCase();
-    this.doneTasksDataSource.filter = filterValue;
-  }
+  filterTasksByPriority(dataSource, completeDataSource, filter, paginator){
+    this[dataSource].data = this[completeDataSource].data;
 
-  filterExpiredTasks(event) {
-    const filterValue = event.target.value.trim().toLowerCase();
-    this.expiredTasksDataSource.filter = filterValue;
-  }
-
-  filterNotStartedTasks(event) {
-    const filterValue = event.target.value.trim().toLowerCase();
-    this.notStartedTasksDataSource.filter = filterValue;
-  }
-
-  filterTodoTasksByPriority() {
-    this.todoTasksDataSource.data = this.completeTodoTasksDataSource.data;
-
-    if (this.todoTasksPrioritiesFilter.length == 1) {
-      this.todoTasksDataSource.data = this.todoTasksDataSource.data.filter(item => item.priority == this.todoTasksPrioritiesFilter[0]);
+    if (this[filter].length == 1) {
+      this[dataSource].data = this[dataSource].data.filter(item => item.priority == this[filter][0]);
     }
 
-    if (this.todoTasksPrioritiesFilter.length == 2) {
-      this.todoTasksDataSource.data = this.todoTasksDataSource.data.filter(item => (item.priority == this.todoTasksPrioritiesFilter[0] || item.priority == this.todoTasksPrioritiesFilter[1]));
+    if (this[filter].length == 2) {
+      this[dataSource].data = this[dataSource].data.filter(item => (item.priority == this[filter][0] || item.priority == this[filter][1]));
     }
 
     setTimeout(() => {
-      this.todoTasksDataSource.paginator = this.paginator1;
+      this[dataSource].paginator = this[paginator];
     }, 0);
-
   }
 
-  filterDoneTasksByPriority() {
-    this.doneTasksDataSource.data = this.completeDoneTasksDataSource.data;
-
-    if (this.doneTasksPrioritiesFilter.length == 1) {
-      this.doneTasksDataSource.data = this.doneTasksDataSource.data.filter(item => item.priority == this.doneTasksPrioritiesFilter[0]);
-    }
-
-    if (this.doneTasksPrioritiesFilter.length == 2) {
-      this.doneTasksDataSource.data = this.doneTasksDataSource.data.filter(item => (item.priority == this.doneTasksPrioritiesFilter[0] || item.priority == this.doneTasksPrioritiesFilter[1]));
-    }
-  }
-
-  filterNotStartedTasksByPriority() {
-    this.notStartedTasksDataSource.data = this.completeNotStartedTasksDataSource.data;
-
-    if (this.notStartedTasksPrioritiesFilter.length == 1) {
-      this.notStartedTasksDataSource.data = this.notStartedTasksDataSource.data.filter(item => item.priority == this.notStartedTasksPrioritiesFilter[0]);
-    }
-
-    if (this.notStartedTasksPrioritiesFilter.length == 2) {
-      this.notStartedTasksDataSource.data = this.notStartedTasksDataSource.data.filter(item => (item.priority == this.notStartedTasksPrioritiesFilter[0] || item.priority == this.notStartedTasksPrioritiesFilter[1]));
-    }
-  }
-
-  filterExpiredTasksByPriority() {
-    this.expiredTasksDataSource.data = this.completeExpiredTasksDataSource.data;
-
-    if (this.expiredTasksPrioritiesFilter.length == 1) {
-      this.expiredTasksDataSource.data = this.expiredTasksDataSource.data.filter(item => item.priority == this.expiredTasksPrioritiesFilter[0]);
-    }
-
-    if (this.expiredTasksPrioritiesFilter.length == 2) {
-      this.expiredTasksDataSource.data = this.expiredTasksDataSource.data.filter(item => (item.priority == this.expiredTasksPrioritiesFilter[0] || item.priority == this.expiredTasksPrioritiesFilter[1]));
-    }
-
-  }
 }

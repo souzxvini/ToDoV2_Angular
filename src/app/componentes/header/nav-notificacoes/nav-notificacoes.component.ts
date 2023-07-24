@@ -13,7 +13,6 @@ export class NavNotificacoesComponent implements OnInit {
 
   constructor(
     private notificationsService: NotificationService,
-    private translateService: TranslateService,
     private router: Router
   ) { }
 
@@ -22,7 +21,7 @@ export class NavNotificacoesComponent implements OnInit {
   notificationPanelState = false;
   allNotificationsList: Notification[] = [];
   unreadNotificationsList: any[] = [];
-  readNotificationsList: any[] = [];
+  notVisualizedNotificationsList: any[] = [];
 
   notificationsStatus = 'all';
 
@@ -36,8 +35,8 @@ export class NavNotificacoesComponent implements OnInit {
     this.notificationsService.getAllNotifications().subscribe({
       next: (res) => {
         this.allNotificationsList = res;
-        this.unreadNotificationsList = res.filter(x => x.visualized == false);
-        this.readNotificationsList = res.filter(x => x.visualized == true);
+        this.notVisualizedNotificationsList = res.filter(x => x.visualized == false);
+        this.unreadNotificationsList = res.filter(x => x.clicked == false);
         this.loaded = true;
       }
     });

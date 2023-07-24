@@ -1,10 +1,10 @@
 <!-- Botão Notifications -->
 <button mat-icon-button matTooltip="Notificações" (click)="notificationPanelState = !notificationPanelState"
   cdkOverlayOrigin #trigger="cdkOverlayOrigin">
-  <mat-icon *ngIf="unreadNotificationsList.length >= 1" [matBadge]="unreadNotificationsList.length" matBadgeSize="small"
+  <mat-icon *ngIf="notVisualizedNotificationsList.length >= 1" [matBadge]="notVisualizedNotificationsList.length" matBadgeSize="small"
     [matBadgeHidden]="!loaded">notifications</mat-icon>
 
-  <mat-icon *ngIf="unreadNotificationsList.length == 0">notifications_none</mat-icon>
+  <mat-icon *ngIf="notVisualizedNotificationsList.length == 0">notifications_none</mat-icon>
 </button>
 
 <!-- Panel Notifications -->
@@ -50,6 +50,45 @@
           </div>
         </div>
       </div>
+
+      <app-sem-dados-disponiveis class="mt-2" *ngIf="allNotificationsList.length == 0"></app-sem-dados-disponiveis>
+    </div>
+
+    <div *ngIf="notificationsStatus == 'unread'">
+
+      <div class="mt-2" class="notificationCard" *ngFor="let notification of unreadNotificationsList"
+        (click)="viewNotificationDetails(notification)" matTooltip="Clique para ver detalhes."
+        matTooltipPosition="left">
+        <strong style="word-wrap: break-word; font-weight: 900 !important;">
+          {{notification.title}}
+        </strong>
+        <div style="display: flex; width: 100%">
+          <div style="width: 90%;">
+            <div style="word-wrap: break-word;">
+              {{notification.description}}
+            </div>
+            <small style="color: rgb(0, 135, 212);">
+              {{notification.date}}
+            </small>
+          </div>
+          <div class="notificationReadIcon">
+            <mat-icon>fiber_manual_record</mat-icon>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-notifications mt-2" *ngIf="unreadNotificationsList.length == 0">
+
+        <span>
+          <em>
+            Não há dados disponíveis.
+          </em>
+          <mat-icon>info</mat-icon>
+      
+        </span>
+      
+      </div>
+
     </div>
   </div>
 </ng-template>

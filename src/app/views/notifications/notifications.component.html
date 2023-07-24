@@ -56,10 +56,13 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-        <mat-paginator #paginator1 class="mt-3" *ngIf="dataSource.filteredData.length > 0"
-          [pageSizeOptions]="[15, 25, 50]" showFirstLastButtons >
-        </mat-paginator>
       </div>
+      <mat-paginator #paginator1 class="mt-3" *ngIf="dataSource.filteredData.length > 0"
+        [pageSizeOptions]="[15, 25, 50]" showFirstLastButtons >
+      </mat-paginator>
+
+      <app-sem-dados-disponiveis *ngIf="dataSource.filteredData.length == 0"></app-sem-dados-disponiveis>
+
     </mat-expansion-panel>
 
   </div>

@@ -74,7 +74,7 @@ import { NotificationsComponent } from './views/notifications/notifications.comp
     ConfirmationDialogComponent,
     SemDadosDisponiveisComponent,
     NavNotificacoesComponent,
-    NotificationsComponent
+    NotificationsComponent,
   ],
   imports: [
     MatChipsModule,

@@ -4,8 +4,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, of } from 'rxjs';
-import { CreateCategoryModalComponent } from 'src/app/componentes/header/modal/create-category-modal/create-category-modal.component';
 import { Notification } from 'src/app/model/notification.model';
 import { NotificationService } from 'src/app/services/notification.service';
 import { ModalNotificationTasksComponent } from './modal-notification-tasks/modal-notification-tasks.component';
@@ -49,9 +47,7 @@ export class NotificationsComponent implements OnInit {
   onClick(event: MouseEvent) {
     const currentRoute = this.router.url;
     if (currentRoute.includes('/notifications') && this.notificationId ) {
-      console.log(this.notificationId)
       this.notificationId = null;
-      console.log(null)
     }
   }
 

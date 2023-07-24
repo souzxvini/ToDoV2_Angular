@@ -101,11 +101,8 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
               </table>
-              <div *ngIf="dataSource.filteredData.length == 0" class="empty-table">
-                <em>
-                  {{ 'HOME.NaoPossuiCategoriaTarefa' | translate }}
-                </em>
-              </div>
+
+              <app-sem-dados-disponiveis *ngIf="dataSource.filteredData.length == 0"></app-sem-dados-disponiveis>
 
             </div>
           </mat-expansion-panel>

@@ -405,7 +405,18 @@ mat-datepicker-toggle {
 }
 
 .empty-table {
-  color: white;
+  padding: 20px;
+  background-color: var(--tableBackgroundColor) !important;
+  color: var(--tableTdTextColor) !important;
+  vertical-align: center !important;
+}
+
+.empty-notifications {
+  text-align: center;
+  padding: 20px;
+  background-color: var(--tableBackgroundColor) !important;
+  color: var(--tableTdTextColor) !important;
+  border-radius: 20px;
 }
 
 .mat-expansion-panel-body {
@@ -425,6 +436,7 @@ mat-datepicker-toggle {
   border: 0;
   border-collapse: collapse !important;
   width: 100% !important;
+  overflow-x: auto;
 }
 
 .full-width-table th {
@@ -527,7 +539,6 @@ th {
   max-height: 92vh !important;
   padding: 15px;
   background-color: var(--notificationPanelBackgroundColor);
-  overflow-y: auto;
 }
 
 .notificationPanelTitle {
@@ -576,7 +587,7 @@ th {
 .notificationCard {
   padding: 12px;
   box-shadow: rgba(0, 0, 0, 0.04) 0px 3px 5px;
-  background-color: rgb(233, 228, 228);
+  background-color: var(--tableBackgroundColor);
   border-radius: 20px;
   word-wrap: break-word;
 }
@@ -611,7 +622,6 @@ th {
 .table-responsive {
   padding: 0px 20px;
   width: 100%;
-  overflow: auto;
 }
 
 .title {
@@ -653,9 +663,14 @@ th {
 }
 
 @media screen and (max-width:500px) {
-
   .main {
     padding: 10px 10px;
   }
+}
 
+@media screen and (max-width: 599px) {
+  .notificationPanel {
+    max-width: 75vw;
+    transition: display 1s;
+  }
 }
